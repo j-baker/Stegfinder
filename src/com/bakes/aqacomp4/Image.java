@@ -11,13 +11,13 @@ public class Image {
 	private int width;
 	private int height;
 	private int size;
-	private byte[][] imageData;
+	private byte[][][] imageData;
 	private String type;
 
 	/**
 	 * 
 	 */
-	public Image(byte[][] imageData, String type) {
+	public Image(byte[][][] imageData, String type) {
 		this.type = type;
 		this.imageData = imageData;
 		height = imageData.length;
@@ -25,9 +25,9 @@ public class Image {
 		size = height*width;
 	}
 	
-	public byte getPixel(int xOffset, int yOffset)
+	public byte getPixel(int xOffset, int yOffset, int colour)
 	{
-		return imageData[xOffset][yOffset];
+		return imageData[xOffset][yOffset][colour];
 	}
 	
 	public int getSize()

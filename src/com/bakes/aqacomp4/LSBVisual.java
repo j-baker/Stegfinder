@@ -17,15 +17,21 @@ public class LSBVisual implements VisualStegMethod {
 	}
 
 	@Override
-	public void testImage(Image i) throws ImageNotTestedException {
+	public void loadImage(Image i) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public double getNumericalResult() throws ImageNotTestedException {
+	public void testImage() throws ImageTooSmallException {
 		// TODO Auto-generated method stub
-		return 0;
+		
+	}
+
+	@Override
+	public double[] getNumericalResult() throws ImageNotTestedException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

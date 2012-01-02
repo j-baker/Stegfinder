@@ -17,20 +17,28 @@ public class SPAMMethod implements StegMethod {
 		// TODO Auto-generated constructor stub
 	}
 
+
 	@Override
-	public void testImage(Image i) {
+	public String getTextResult() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void loadImage(Image i) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public double getNumericalResult() {
+	public void testImage() {
 		// TODO Auto-generated method stub
-		return 0;
+		
 	}
 
+
 	@Override
-	public String getTextResult() {
+	public double[] getNumericalResult() throws ImageNotTestedException {
 		// TODO Auto-generated method stub
 		return null;
 	}

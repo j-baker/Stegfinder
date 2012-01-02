@@ -6,9 +6,11 @@ public interface StegMethod {
 	String infoLevel2 = "";
 	String infoLevel3 = "";
 	
-	public void testImage(Image i) throws ImageNotTestedException;
+	public void loadImage(Image i);
 	
-	public double getNumericalResult() throws ImageNotTestedException;
+	public void testImage() throws ImageTooSmallException;
+	
+	public double[] getNumericalResult() throws ImageNotTestedException;
 	
 	public String getTextResult() throws ImageNotTestedException;
 	
