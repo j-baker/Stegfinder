@@ -91,30 +91,23 @@
       <x="673"/>
       <y="154"/>
    </type>
+   <type>
+      <name="=COMP4-TEST/src<com.bakes.aqacomp4{TestConsole.java[TestConsole"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="494"/>
+      <y="389"/>
+   </type>
+   <type>
+      <name="=COMP4-TEST/src<com.bakes.aqacomp4{BasicImporter.java[BasicImporter"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="1005"/>
+      <y="413"/>
+   </type>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
       <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{RSMethod.java[RSMethod"/>
-      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageTooSmallException.java[ImageTooSmallException"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{ChiSquareMethod.java[ChiSquareMethod"/>
-      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageNotTestedException.java[ImageNotTestedException"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{LSBVisual.java[LSBVisual"/>
-      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{VisualStegMethod.java[VisualStegMethod"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{ChiSquareMethod.java[ChiSquareMethod"/>
       <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{StegMethod.java[StegMethod"/>
       <bendpoints>
       </bendpoints>
@@ -129,14 +122,7 @@
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
       <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{RSMethod.java[RSMethod"/>
-      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageNotTestedException.java[ImageNotTestedException"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{RSMethod.java[RSMethod"/>
-      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{StegMethod.java[StegMethod"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageTooSmallException.java[ImageTooSmallException"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -144,6 +130,81 @@
       <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
       <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{VisualStegMethod.java[VisualStegMethod"/>
       <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{StegMethod.java[StegMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{TestConsole.java[TestConsole"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{TestConsole.java[TestConsole"/>
+      <bendpoints>
+         <bendpoint>
+            <x="40"/>
+            <y="0"/>
+         </bendpoint>
+         <bendpoint>
+            <x="40"/>
+            <y="-40"/>
+         </bendpoint>
+         <bendpoint>
+            <x="0"/>
+            <y="-40"/>
+         </bendpoint>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{TestConsole.java[TestConsole"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageImporter.java[ImageImporter"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{LSBVisual.java[LSBVisual"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{VisualStegMethod.java[VisualStegMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{RSMethod.java[RSMethod"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageNotTestedException.java[ImageNotTestedException"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{BasicImporter.java[BasicImporter"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageImporter.java[ImageImporter"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{ChiSquareMethod.java[ChiSquareMethod"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{StegMethod.java[StegMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{TestConsole.java[TestConsole"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{StegMethod.java[StegMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{BasicImporter.java[BasicImporter"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{Image.java[Image"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=COMP4-TEST/src<com.bakes.aqacomp4{ChiSquareMethod.java[ChiSquareMethod"/>
+      <targetType="=COMP4-TEST/src<com.bakes.aqacomp4{ImageNotTestedException.java[ImageNotTestedException"/>
       <bendpoints>
       </bendpoints>
    </relationship>
