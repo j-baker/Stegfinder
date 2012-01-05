@@ -3,19 +3,22 @@
  */
 package com.bakes.aqacomp4;
 
+import java.io.File;
+
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.basic.BasicMLData;
+import org.encog.ml.svm.SVM;
+import org.encog.persist.EncogDirectoryPersistence;
+
 
 /**
  * @author bakes
  *
  */
 public class SPAMMethod implements StegMethod {
-
-	/**
-	 * 
-	 */
-	public SPAMMethod() {
-		// TODO Auto-generated constructor stub
-	}
+	private Image image;
+	double[] result;
+	SVM network;
 
 
 	@Override
@@ -26,45 +29,56 @@ public class SPAMMethod implements StegMethod {
 
 	@Override
 	public void loadImage(Image i) {
-		// TODO Auto-generated method stub
-		
+		this.image = i;
+		String fileName = "res/test/testSVM.eg";
+		network = (SVM)EncogDirectoryPersistence.loadObject(new File(fileName));
 	}
 
 	@Override
 	public void testImage() {
-		
-		// TODO Auto-generated method stub
+		double[][] features = getSPAMFeatures(image);
+		double[] result = new double[3];
+		for (int i = 0; i < 3; i++)
+		{
+			MLData d = new BasicMLData(features[i]);
+			d = network.compute(d);
+			result[i] = d.getData(0);
+		}
+		this.result = result;
 		
 	}
 
 
 	@Override
 	public double[] getNumericalResult() throws ImageNotTestedException {
-		// TODO Auto-generated method stub
-		return null;
+		if (result == null)
+		{
+			throw new ImageNotTestedException();
+		}
+		return result;
 	}
 
 	private static final int MAXDIFFERENCE = 3;
 
 	
-	public double[][] getSPAMFeatures(byte[][][] imageData)
+	public double[][] getSPAMFeatures(Image image)
 	{
 		double[][] result = new double[2*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)][3];
 		for (int q = 0; q < 3; q++)
 		{
-			int[][] right = getDifferences(imageData, q, 0, 1);
-			int[][] left = getDifferences(imageData, q, 0, -1);
-			int[][] up = getDifferences(imageData, q, -1, 0);
-			int[][] down = getDifferences(imageData, q, 1, 0);
+			int[][] right = getDifferences(image, q, 0, 1);
+			int[][] left = getDifferences(image, q, 0, -1);
+			int[][] up = getDifferences(image, q, -1, 0);
+			int[][] down = getDifferences(image, q, 1, 0);
 			double[][][] markovRight = getMarkovSecondOrder(right, 0, 1);
 			double[][][] markovLeft = getMarkovSecondOrder(left, 0, -1);
 			double[][][] markovUp = getMarkovSecondOrder(up, -1, 0);
 			double[][][] markovDown = getMarkovSecondOrder(down, 1, 0);
 			
-			int[][] downRight = getDifferences(imageData, q, 1, 1);
-			int[][] downLeft = getDifferences(imageData, q, 1, -1);
-			int[][] upLeft = getDifferences(imageData, q, -1, -1);
-			int[][] upRight = getDifferences(imageData, q, -1, 1);
+			int[][] downRight = getDifferences(image, q, 1, 1);
+			int[][] downLeft = getDifferences(image, q, 1, -1);
+			int[][] upLeft = getDifferences(image, q, -1, -1);
+			int[][] upRight = getDifferences(image, q, -1, 1);
 			double[][][] markovDownRight = getMarkovSecondOrder(downRight, 1, 1);
 			double[][][] markovDownLeft = getMarkovSecondOrder(downLeft, 1, -1);
 			double[][][] markovUpLeft = getMarkovSecondOrder(upLeft, -1, -1);
@@ -136,19 +150,17 @@ public class SPAMMethod implements StegMethod {
 		return results;
 	}
 	
-	public int[][] getDifferences(byte[][][] channelData, int channel, int changeRows, int changeColumns)
+	public int[][] getDifferences(Image image, int channel, int changeRows, int changeColumns)
 	{
-		int height = channelData.length;
-		int width = channelData[0].length;
-		
-		
+		int height = image.getHeight();
+		int width = image.getWidth();
 		int[][] differences = new int[height][width];
 		
 		for (int i = 0 + ((changeRows < 0)? 1 : 0); i < height - ((changeRows > 0)? 1 : 0); i++)
 		{
 			for (int j = 0 + ((changeColumns < 0)? 1 : 0); j < width - ((changeColumns > 0)? 1 : 0); j++)
 			{
-				int difference = channelData[i][j][channel] - channelData[i+changeRows][j+changeColumns][channel];
+				int difference = image.getPixel(i, j, channel) - image.getPixel(i+changeRows, j+changeColumns, channel);
 				differences[i][j] = difference;
 			}
 		}
