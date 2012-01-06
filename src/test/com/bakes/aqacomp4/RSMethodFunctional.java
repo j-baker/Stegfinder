@@ -11,6 +11,7 @@ public class RSMethodFunctional {
 	static final String suffix = ".bmp";
 	ImageImporter importer = new BasicImporter();
 	StegMethod s;
+	static final double ERROR_MARGIN = 0.3;
 
 	@Before
 	public void setUp() throws Exception {
@@ -21,8 +22,14 @@ public class RSMethodFunctional {
 	public void tearDown() throws Exception {
 	}
 
+	/**
+	 * Load 20 images with known embedding (see folder res/test/).
+	 * Run test on each.
+	 * Verify that test results are within a predefined margin of error.
+	 */
 	@Test
-	public void testGetNumericalResult() {
+	public void performFunctionalTest() {
+
 		for (int i = 0; i <= 100; i+=5)
 		{
 			System.out.println("Testing "+i);
@@ -37,7 +44,7 @@ public class RSMethodFunctional {
 				double[] result = s.getNumericalResult();
 				for (int j = 0; j < 3; j++)
 				{
-					if (result[j] + 0.3 < i*0.01 || result[j] - 0.3 > i*0.01)
+					if (result[j] + ERROR_MARGIN < i*0.01 || result[j] - ERROR_MARGIN > i*0.01)
 					{
 						fail("Test not accurate enough");
 					}
@@ -47,21 +54,6 @@ public class RSMethodFunctional {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Test
-	public void testGetTextResult() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testLoadImage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testTestImage() {
-		fail("Not yet implemented");
 	}
 
 }

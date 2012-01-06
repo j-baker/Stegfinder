@@ -51,7 +51,6 @@ public class RSMethod implements StegMethod {
 	public void loadImage(Image i) {
 		image = i;
 		size = image.getSize();
-		
 	}
 
 	@Override

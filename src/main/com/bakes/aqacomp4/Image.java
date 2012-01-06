@@ -29,7 +29,7 @@ public class Image {
 	public int getPixel(int xOffset, int yOffset, int colour)
 	{
 		/* Remove the sign. */
-		return 255 & imageData[xOffset][yOffset][colour];
+		return 0xFF & imageData[xOffset][yOffset][colour];
 	}
 	
 	public int getSize()
