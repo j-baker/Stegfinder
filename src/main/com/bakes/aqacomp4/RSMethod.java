@@ -67,7 +67,7 @@ public class RSMethod implements StegMethod {
 			{
 				for (int j = 0; j <= image.getWidth()-GROUPSIZE; j+=GROUPSIZE)
 				{
-					byte[] group = new byte[GROUPSIZE];
+					int[] group = new int[GROUPSIZE];
 					for (int k = 0; k < group.length; k++)
 					{
 						group[k] = image.getPixel(i, j+k, q);
@@ -140,7 +140,7 @@ public class RSMethod implements StegMethod {
 		executed = true;
 	}
 	
-	private int calculateNoise(byte[] x)
+	private int calculateNoise(int[] x)
 	{
 		int sum = 0;
 		for (int i = 0; i<x.length-1;i++)
@@ -150,9 +150,9 @@ public class RSMethod implements StegMethod {
 		return sum;
 	}
 	
-	private byte[] mask(byte[] x, int mask)
+	private int[] mask(int[] x, int mask)
 	{
-		byte[] y = Arrays.copyOf(x, x.length);
+		int[] y = Arrays.copyOf(x, x.length);
 		for (int i = 0; i < y.length; i++)
 		{
 			if (mask ==1)
@@ -167,9 +167,9 @@ public class RSMethod implements StegMethod {
 		return y;
 	}
 	
-	private byte[] flipSLSB(byte[] x)
+	private int[] flipSLSB(int[] x)
 	{
-		byte[] y = Arrays.copyOf(x, x.length);
+		int[] y = Arrays.copyOf(x, x.length);
 		for (int i = 0; i < y.length; i++)
 		{
 			y[i] += (y[i]%2==0)?2:-2;

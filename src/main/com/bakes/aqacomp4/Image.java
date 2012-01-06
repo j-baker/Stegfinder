@@ -25,9 +25,11 @@ public class Image {
 		size = height*width;
 	}
 	
-	public byte getPixel(int xOffset, int yOffset, int colour)
+
+	public int getPixel(int xOffset, int yOffset, int colour)
 	{
-		return imageData[xOffset][yOffset][colour];
+		/* Remove the sign. */
+		return 255 & imageData[xOffset][yOffset][colour];
 	}
 	
 	public int getSize()

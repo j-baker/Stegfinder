@@ -61,7 +61,7 @@ public class ChiSquareMethod implements StegMethod {
 			{
 				for (int j = 0; j < image.getWidth(); j++)
 				{
-					bins[255 & image.getPixel(i, j, q)]++;
+					bins[image.getPixel(i, j, q)]++;
 				}
 			}
 			double chiSquare = 0;
