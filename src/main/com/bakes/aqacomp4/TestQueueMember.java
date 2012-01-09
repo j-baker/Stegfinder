@@ -8,18 +8,43 @@ package com.bakes.aqacomp4;
  *
  */
 public class TestQueueMember {
-	String imagePath;
-	boolean hasBeenTested = false;
-	double numericalResult[];
-	String resultAsString;
+	private String imagePath;
+	private boolean hasBeenTested = false;
+	private double[] numericalResult;
+	private String resultAsString;
 	
-	public TestQueueMember(String imagePath) {
+	// Information about which test to use
+	StegMethods method;
+	
+	
+	public TestQueueMember(String imagePath, StegMethods method) {
 		this.imagePath = imagePath;
+		this.method = method;
 	}
 	
 	public String getImagePath()
 	{
 		return imagePath;
+	}
+	
+	public void runMethod()
+	{
+		StegMethod method = this.method.getMethod();
+		Image i = (new BasicImporter()).importImage(this.imagePath);
+		method.loadImage(i);
+		try {
+			method.testImage();
+			this.numericalResult = method.getNumericalResult();
+			this.resultAsString = method.getTextResult();
+			this.hasBeenTested = true;
+		} catch (ImageTooSmallException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ImageNotTestedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -48,20 +73,6 @@ public class TestQueueMember {
 		else
 		{
 			return resultAsString;
-		}
-	}
-	
-	public void setResult(double[] numericalResult, String resultAsString) throws ImageTestedException
-	{
-		if (hasBeenTested)
-		{
-			throw new ImageTestedException();
-		}
-		else
-		{
-			this.numericalResult = numericalResult;
-			this.resultAsString = resultAsString;
-			hasBeenTested = true;
 		}
 	}
 
