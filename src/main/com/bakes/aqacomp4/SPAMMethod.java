@@ -61,7 +61,7 @@ public class SPAMMethod implements StegMethod {
 	private static final int MAXDIFFERENCE = 3;
 
 	
-	public double[][] getSPAMFeatures(Image image)
+	private double[][] getSPAMFeatures(Image image)
 	{
 		double[][] result = new double[2*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)][3];
 		for (int q = 0; q < 3; q++)
@@ -115,7 +115,7 @@ public class SPAMMethod implements StegMethod {
 		return result;
 	}
 
-	public double[][][] getMarkovSecondOrder(int[][] differences, int changeRows, int changeColumns)
+	private double[][][] getMarkovSecondOrder(int[][] differences, int changeRows, int changeColumns)
 	{
 		int height = differences.length;
 		int width = differences[0].length;
@@ -150,7 +150,7 @@ public class SPAMMethod implements StegMethod {
 		return results;
 	}
 	
-	public int[][] getDifferences(Image image, int channel, int changeRows, int changeColumns)
+	private int[][] getDifferences(Image image, int channel, int changeRows, int changeColumns)
 	{
 		int height = image.getHeight();
 		int width = image.getWidth();
