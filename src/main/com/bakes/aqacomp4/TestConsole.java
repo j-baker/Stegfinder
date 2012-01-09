@@ -28,6 +28,10 @@ public class TestConsole {
 	
 	public void run()
 	{
+		
+		
+		
+		
 		String path = console.readLine("Where is the image file? ");
 		ImageImporter b = new BasicImporter();
 		Image i = b.importImage(path);

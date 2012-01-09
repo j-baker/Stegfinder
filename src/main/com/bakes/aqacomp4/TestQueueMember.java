@@ -15,11 +15,13 @@ public class TestQueueMember {
 	
 	// Information about which test to use
 	StegMethods method;
+	ImageTypes imageType;
 	
 	
-	public TestQueueMember(String imagePath, StegMethods method) {
+	public TestQueueMember(String imagePath, StegMethods method, ImageTypes type) {
 		this.imagePath = imagePath;
 		this.method = method;
+		this.imageType = type;
 	}
 	
 	public String getImagePath()
