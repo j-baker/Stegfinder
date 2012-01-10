@@ -4,6 +4,8 @@
 package com.bakes.aqacomp4;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.aqa.Console;
 
@@ -28,26 +30,26 @@ public class TestConsole {
 	
 	public void run()
 	{
+		Queue<TestQueueMember> queue = new LinkedList<TestQueueMember>();
 		
-		
-		
-		
-		String path = console.readLine("Where is the image file? ");
-		ImageImporter b = new BasicImporter();
-		Image i = b.importImage(path);
-		StegMethod s = new RSMethod();
-		s.loadImage(i);
-		try {
-			s.testImage();
-		} catch (ImageTooSmallException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		int numImages = console.readInteger("How many images do you want to load? ");
+		for (int i = 0; i < numImages; i++)
+		{
+			String path = console.readLine("What is the path for image "+i+"? ");
+			TestQueueMember member = new TestQueueMember(path, StegMethods.RS, ImageTypes.BITMAP);
+			queue.add(member);
 		}
-		try {
-			console.println(Arrays.toString(s.getNumericalResult()));
-		} catch (ImageNotTestedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		while (!queue.isEmpty())
+		{
+			TestQueueMember item = queue.remove();
+			item.runMethod();
+			try {
+				System.out.println(Arrays.toString(item.getNumericalResult()));
+			} catch (ImageNotTestedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
