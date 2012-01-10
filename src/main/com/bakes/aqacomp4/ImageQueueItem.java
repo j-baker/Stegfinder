@@ -7,7 +7,7 @@ package com.bakes.aqacomp4;
  * @author bakes
  *
  */
-public class TestQueueMember {
+public class ImageQueueItem {
 	private String imagePath;
 	private boolean hasBeenTested = false;
 	private double[] numericalResult;
@@ -18,7 +18,7 @@ public class TestQueueMember {
 	ImageTypes imageType;
 	
 	
-	public TestQueueMember(String imagePath, StegMethods method, ImageTypes type) {
+	public ImageQueueItem(String imagePath, StegMethods method, ImageTypes type) {
 		this.imagePath = imagePath;
 		this.method = method;
 		this.imageType = type;

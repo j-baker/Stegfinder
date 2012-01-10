@@ -30,19 +30,19 @@ public class TestConsole {
 	
 	public void run()
 	{
-		Queue<TestQueueMember> queue = new LinkedList<TestQueueMember>();
+		Queue<ImageQueueItem> queue = new LinkedList<ImageQueueItem>();
 		
 		int numImages = console.readInteger("How many images do you want to load? ");
 		for (int i = 0; i < numImages; i++)
 		{
 			String path = console.readLine("What is the path for image "+i+"? ");
-			TestQueueMember member = new TestQueueMember(path, StegMethods.RS, ImageTypes.BITMAP);
+			ImageQueueItem member = new ImageQueueItem(path, StegMethods.RS, ImageTypes.BITMAP);
 			queue.add(member);
 		}
 		
 		while (!queue.isEmpty())
 		{
-			TestQueueMember item = queue.remove();
+			ImageQueueItem item = queue.remove();
 			item.runMethod();
 			try {
 				System.out.println(Arrays.toString(item.getNumericalResult()));
