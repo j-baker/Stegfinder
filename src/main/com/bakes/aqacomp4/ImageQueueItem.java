@@ -3,6 +3,8 @@
  */
 package com.bakes.aqacomp4;
 
+import java.util.Arrays;
+
 /**
  * @author bakes
  *
@@ -74,7 +76,7 @@ public class ImageQueueItem {
 		}
 		else
 		{
-			return resultAsString;
+			return Arrays.toString(numericalResult);
 		}
 	}
 
