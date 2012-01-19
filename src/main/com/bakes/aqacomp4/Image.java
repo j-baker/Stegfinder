@@ -2,7 +2,7 @@
  * 
  */
 package com.bakes.aqacomp4;
-
+//TODO I wanted to potentially end up using JPEG images so I didn't use the Java default image.
 /**
  * @author bakes
  *
@@ -29,7 +29,7 @@ public class Image {
 	public int getPixel(int xOffset, int yOffset, int colour)
 	{
 		/* Remove the sign. */
-		return 0xFF & imageData[xOffset][yOffset][colour];
+		return 0xFF & imageData[yOffset][xOffset][colour];
 	}
 	
 	public int getSize()

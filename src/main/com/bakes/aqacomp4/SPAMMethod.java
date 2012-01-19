@@ -4,6 +4,7 @@
 package com.bakes.aqacomp4;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
@@ -58,113 +59,135 @@ public class SPAMMethod implements StegMethod {
 		return result;
 	}
 
-	private static final int MAXDIFFERENCE = 3;
-
+	private static final int MAX_DIFFERENCE = 3;
 	
-	private double[][] getSPAMFeatures(Image image)
+	public static void main(String[] args)
 	{
-		double[][] result = new double[2*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)][3];
-		for (int q = 0; q < 3; q++)
+		Image i = new BasicImporter().importImage("kosmo_0.bmp");
+		SPAMMethod s = new SPAMMethod();
+		s.getSPAMFeatures(i);
+		//s.tester();
+	}
+	
+	double[][] getSPAMFeatures(Image image)
+	{
+		final boolean lessFeatures = true;
+		
+		int numColours = 1;
+		int[][][][][] counts = new int[numColours][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
+		int[][][][] maxCounts = new int[numColours][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
+		
+		for (int q = 0; q < numColours; q++)
 		{
-			int[][] right = getDifferences(image, q, 0, 1);
-			int[][] left = getDifferences(image, q, 0, -1);
-			int[][] up = getDifferences(image, q, -1, 0);
-			int[][] down = getDifferences(image, q, 1, 0);
-			double[][][] markovRight = getMarkovSecondOrder(right, 0, 1);
-			double[][][] markovLeft = getMarkovSecondOrder(left, 0, -1);
-			double[][][] markovUp = getMarkovSecondOrder(up, -1, 0);
-			double[][][] markovDown = getMarkovSecondOrder(down, 1, 0);
-			
-			int[][] downRight = getDifferences(image, q, 1, 1);
-			int[][] downLeft = getDifferences(image, q, 1, -1);
-			int[][] upLeft = getDifferences(image, q, -1, -1);
-			int[][] upRight = getDifferences(image, q, -1, 1);
-			double[][][] markovDownRight = getMarkovSecondOrder(downRight, 1, 1);
-			double[][][] markovDownLeft = getMarkovSecondOrder(downLeft, 1, -1);
-			double[][][] markovUpLeft = getMarkovSecondOrder(upLeft, -1, -1);
-			double[][][] markovUpRight = getMarkovSecondOrder(upRight, -1, 1);
-			
-			double[][][] straights = new double[2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1];
-			double[][][] diagonals = new double[2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1];
-			for (int i = 0; i < 2*MAXDIFFERENCE+1; i++)
+			for (int i = 0; i < image.getHeight(); i++)
 			{
-				for (int j = 0; j < 2*MAXDIFFERENCE+1; j++)
+				for (int j = 0; j < image.getWidth(); j++)
 				{
-					for (int k = 0; k < 2*MAXDIFFERENCE+1; k++)
+					for (int offsetY = -1; offsetY <= 1; offsetY++)
 					{
-						straights[i][j][k] = 0.25*(markovRight[i][j][k] + markovLeft[i][j][k] + markovUp[i][j][k] + markovDown[i][j][k]);
-						diagonals[i][j][k] = 0.25*(markovDownRight[i][j][k] + markovDownLeft[i][j][k] + markovUpLeft[i][j][k] + markovUpRight[i][j][k]);
+						if (i + (3*offsetY) >= 0 && i+(3*offsetY) < image.getHeight())
+						{
+							for (int offsetX = -1; offsetX <= 1; offsetX++)
+							{
+								if (j + (3*offsetX) >= 0 && j+(3*offsetX) < image.getWidth() && !(offsetX == 0 && offsetY ==0))
+								{
+									try {
+										int difference1 = getDifference(image, q, j, i, j+offsetX, i+offsetY);
+										int difference2 = getDifference(image, q, j+offsetX, i+offsetY, j+(2*offsetX), i+(2*offsetY));
+										int difference3 = getDifference(image, q, j+(2*offsetX), i+(2*offsetY), j+(3*offsetX), i+(3*offsetY));
+										if (Math.abs(difference1) <= MAX_DIFFERENCE && Math.abs(difference2) <= MAX_DIFFERENCE && Math.abs(difference3) <= MAX_DIFFERENCE)
+										{
+											counts[q][directionToArray(offsetX, offsetY)][MAX_DIFFERENCE+difference1][MAX_DIFFERENCE+difference2][MAX_DIFFERENCE+difference3]++;
+											maxCounts[q][directionToArray(offsetX, offsetY)][MAX_DIFFERENCE+difference1][MAX_DIFFERENCE+difference2]++;
+										}
+									} catch (ImageTooSmallException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									
+										
+								}
+							}
+						}
 					}
 				}
 			}
-			
-			double[] spamFeatures = new double[2*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)];
-			for (int i = 0; i < 2*MAXDIFFERENCE+1; i++)
-			{
-				for (int j = 0; j < 2*MAXDIFFERENCE+1; j++)
-				{
-					for (int k = 0; k < 2*MAXDIFFERENCE+1; k++)
-					{
-						spamFeatures[((2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*i)+((2*MAXDIFFERENCE+1)*j)+k] = straights[i][j][k];
-						spamFeatures[((2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1))+(((2*MAXDIFFERENCE+1)*(2*MAXDIFFERENCE+1)*i)+((2*MAXDIFFERENCE+1)*j)+k)] = diagonals[i][j][k];
-					}
-				}
-			}
-			result[q] = spamFeatures;
 		}
+		
+		double[][] result;
+		
+		if (lessFeatures)
+		{
+			result = new double[numColours][2*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)*(MAX_DIFFERENCE+1)];
+		}
+		else
+		{
+			result = new double[numColours][2*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)];
+		}
+		for (int q = 0; q < numColours; q++)
+		{
+			int count = 0;
+			for (int i = 0; i < counts[0][0].length; i++)
+			{
+				for (int j = 0; j < counts[0][0][0].length; j++)
+				{
+					for (int k = (lessFeatures ? MAX_DIFFERENCE: 0); k < counts[0][0][0][0].length; k++)
+					{
+						result[q][count] = (counts[q][0][i][j][k]+counts[q][2][i][j][k]+counts[q][4][i][j][k]+counts[q][6][i][j][k]+0.0)/(maxCounts[q][0][i][j]+maxCounts[q][2][i][j]+maxCounts[q][4][i][j]+maxCounts[q][6][i][j]);
+						result[q][count+1] = (counts[q][1][i][j][k]+counts[q][3][i][j][k]+counts[q][5][i][j][k]+counts[q][7][i][j][k]+0.0)/(maxCounts[q][1][i][j]+maxCounts[q][3][i][j]+maxCounts[q][5][i][j]+maxCounts[q][7][i][j]);	
+						count += 2;
+					}
+				}
+			}
+		}
+		
 		return result;
 	}
-
-	private double[][][] getMarkovSecondOrder(int[][] differences, int changeRows, int changeColumns)
+	
+	int directionToArray(int x, int y)
 	{
-		int height = differences.length;
-		int width = differences[0].length;
-		
-		int[][][] counts = new int[2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1];
-		int[][] generalCounts = new int[2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1];
-		double[][][] results = new double[2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1][2*MAXDIFFERENCE+1];
-		
-		for (int i = 0 + ((changeRows < 0)? 2 : 0); i < height - ((changeRows > 0)? 2 : 0); i++)
+		if (x == 0 && y == 1)
 		{
-			for (int j = 0 + ((changeColumns < 0)? 2 : 0); j < width - ((changeColumns > 0)? 2 : 0); j++)
-			{
-				if (Math.abs(differences[i][j]) <= MAXDIFFERENCE && Math.abs(differences[i+changeRows][j+changeColumns]) <= MAXDIFFERENCE)
-				{
-					if (Math.abs(differences[i+(2*changeRows)][j+(2*changeColumns)]) <= MAXDIFFERENCE)
-					{
-						counts[MAXDIFFERENCE+differences[i][j]][MAXDIFFERENCE+differences[i+changeRows][j+changeColumns]][MAXDIFFERENCE+differences[i+(2*changeRows)][j+(2*changeColumns)]]++;	
-					}
-					generalCounts[MAXDIFFERENCE+differences[i][j]][MAXDIFFERENCE+differences[i+changeRows][j+changeColumns]]++;
-				}
-			}
+			return 0;
 		}
-		
-		for (int i = 0; i < 2*MAXDIFFERENCE+1; i++)
+		else if (x == 1 && y == 1)
 		{
-			for (int j = 0; j < 2*MAXDIFFERENCE+1; j++)
-			{
-				for (int k = 0; k < 2*MAXDIFFERENCE+1; k++)
-				results[i][j][k] = ((double) counts[i][j][k])/((double) generalCounts[i][j]);
-			}
+			return 1;
 		}
-		return results;
+		else if (x == 1 && y == 0)
+		{
+			return 2;
+		}
+		else if (x == 1 && y == -1)
+		{
+			return 3;
+		}
+		else if (x== 0 && y == -1)
+		{
+			return 4;
+		}
+		else if (x == -1 && y == -1)
+		{
+			return 5;
+		}
+		else if (x == -1 && y == 0)
+		{
+			return 6;
+		}
+		else if (x == -1 && y == 1)
+		{
+			return 7;
+		}
+		System.out.println("Returning fail for "+x + " "+y);
+		return -1;
 	}
 	
-	private int[][] getDifferences(Image image, int channel, int changeRows, int changeColumns)
+	int getDifference(Image image, int q, int x1, int y1, int x2, int y2) throws ImageTooSmallException
 	{
-		int height = image.getHeight();
-		int width = image.getWidth();
-		int[][] differences = new int[height][width];
-		
-		for (int i = 0 + ((changeRows < 0)? 1 : 0); i < height - ((changeRows > 0)? 1 : 0); i++)
+		if (image.getWidth() <= x1 || image.getHeight() <= y1 || image.getWidth() <= x2 || image.getHeight() <= y2 || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0)
 		{
-			for (int j = 0 + ((changeColumns < 0)? 1 : 0); j < width - ((changeColumns > 0)? 1 : 0); j++)
-			{
-				int difference = image.getPixel(i, j, channel) - image.getPixel(i+changeRows, j+changeColumns, channel);
-				differences[i][j] = difference;
-			}
+			throw new ImageTooSmallException();
 		}
-		
-		return differences;		
+		return image.getPixel(x2, y2, q) - image.getPixel(x1,  y1, q);
 	}
 }

@@ -68,6 +68,11 @@ public class ImageQueueItem {
 		}
 	}
 	
+	/**
+	 * Get the result of Steganalysis as a user-friendly String.
+	 * @return A String of any length.
+	 * @throws ImageNotTestedException
+	 */
 	public String getResultAsString() throws ImageNotTestedException
 	{
 		if (!hasBeenTested)

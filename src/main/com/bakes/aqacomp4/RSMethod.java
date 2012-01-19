@@ -69,7 +69,7 @@ public class RSMethod implements StegMethod {
 					int[] group = new int[GROUPSIZE];
 					for (int k = 0; k < group.length; k++)
 					{
-						group[k] = image.getPixel(i, j+k, q);
+						group[k] = image.getPixel(j+k, i, q);
 					}
 					int t = calculateNoise(mask(group, 1));
 					if (calculateNoise(group) < t)
