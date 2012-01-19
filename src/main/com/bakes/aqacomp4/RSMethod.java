@@ -12,16 +12,9 @@ import java.util.Arrays;
 public class RSMethod implements StegMethod {
 	private Image image = null;
 	private int size;
-	private double[] result = new double[3];
+	private double[] result = new double[Colour.length()];
 	private boolean executed = false;
 	static final int GROUPSIZE = 3;
-
-	/**
-	 * 
-	 */
-	public RSMethod() {
-		// TODO Auto-generated constructor stub
-	}
 	
 	public double getTimeEstimate(double benchmark)
 	{
@@ -60,7 +53,7 @@ public class RSMethod implements StegMethod {
 			throw new ImageTooSmallException();
 		}
 		int[][] counts = new int[3][9];
-		for (int q = 0; q < 3; q++)
+		for (Colour q : Colour.values())
 		{
 			for (int i = 0; i < image.getHeight(); i++)
 			{
@@ -69,63 +62,63 @@ public class RSMethod implements StegMethod {
 					int[] group = new int[GROUPSIZE];
 					for (int k = 0; k < group.length; k++)
 					{
-						group[k] = image.getPixel(j+k, i, q);
+						group[k] = image.getPixel(i, j+k, q);
 					}
 					int t = calculateNoise(mask(group, 1));
 					if (calculateNoise(group) < t)
 					{
-						counts[q][0]++;
+						counts[q.ordinal()][0]++;
 					}
 					else if (calculateNoise(group) == t)
 					{
-						counts[q][2]++;
+						counts[q.ordinal()][2]++;
 					}
 					else
 					{
-						counts[q][1]++;
+						counts[q.ordinal()][1]++;
 					}
 					t = calculateNoise(mask(group, -1));
 					if (calculateNoise(group) < t)
 					{
-						counts[q][3]++;
+						counts[q.ordinal()][3]++;
 					}
 					else if (calculateNoise(group) == t)
 					{
-						counts[q][5]++;
+						counts[q.ordinal()][5]++;
 					}
 					else
 					{
-						counts[q][4]++;
+						counts[q.ordinal()][4]++;
 					}
 					
 					t = calculateNoise(flipSLSB(group));
 					
 					if (calculateNoise(group) < t)
 					{
-						counts[q][6]++;
+						counts[q.ordinal()][6]++;
 					}
 					else if (calculateNoise(group) == t)
 					{
-						counts[q][8]++;
+						counts[q.ordinal()][8]++;
 					}
 					else
 					{
-						counts[q][7]++;
+						counts[q.ordinal()][7]++;
 					}
 				}
 			}
 			
-			final int numGroups = counts[q][1] + counts[q][2] + counts[q][3];
+			final int numGroups = counts[q.ordinal()][1] + counts[q.ordinal()][2] + counts[q.ordinal()][3];
 
-			double R1Left = (double) (counts[q][0]/(numGroups+0.0));
-			double S1Left = (double) (counts[q][1]/(numGroups+0.0));
-			double Rm1Left = (double) (counts[q][3]/(numGroups+0.0));
-			double Sm1Left = (double) (counts[q][4]/(numGroups+0.0));
+			double R1Left = (double) (counts[q.ordinal()][0]/(numGroups+0.0));
+			double S1Left = (double) (counts[q.ordinal()][1]/(numGroups+0.0));
+			double Rm1Left = (double) (counts[q.ordinal()][3]/(numGroups+0.0));
+			double Sm1Left = (double) (counts[q.ordinal()][4]/(numGroups+0.0));
 			
 			double R1Right = S1Left;
 			double S1Right = R1Left;
-			double Rm1Right = (double) (counts[q][6]/(numGroups+0.0));
-			double Sm1Right = (double) (counts[q][7]/(numGroups+0.0));
+			double Rm1Right = (double) (counts[q.ordinal()][6]/(numGroups+0.0));
+			double Sm1Right = (double) (counts[q.ordinal()][7]/(numGroups+0.0));
 						
 			double d0 = R1Left-S1Left;
 			double dm0 = Rm1Left-Sm1Left;
@@ -134,7 +127,7 @@ public class RSMethod implements StegMethod {
 			
 			double z = (d0-dm0)/(-dm0+dm1+d1+(3*d0));
 
-			result[q] = z/(z-0.5);
+			result[q.ordinal()] = z/(z-0.5);
 		}
 		executed = true;
 	}

@@ -21,7 +21,7 @@ public class BasicImporter implements ImageImporter {
 	@Override
 	public Image importImage(String path) {
 		
-		Image i = new Image(loadImage(path),"bmp");
+		Image i = new Image(loadImage(path),ImageTypes.BITMAP);
 		return i;
 	}
 

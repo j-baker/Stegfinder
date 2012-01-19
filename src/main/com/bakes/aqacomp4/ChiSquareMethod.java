@@ -11,7 +11,7 @@ package com.bakes.aqacomp4;
 public class ChiSquareMethod implements StegMethod {
 	private Image image = null;
 	private int size;
-	private double[] result = new double[3];
+	private double[] result = new double[Colour.length()];
 	private boolean executed = false;
 
 	/**
@@ -54,14 +54,19 @@ public class ChiSquareMethod implements StegMethod {
 
 	@Override
 	public void testImage() {
-		for (int q = 0; q < 3; q++)
+		for (Colour q : Colour.values())
 		{
 			int[] bins = new int[256];
 			for (int i = 0; i < image.getHeight(); i++)
 			{
 				for (int j = 0; j < image.getWidth(); j++)
 				{
-					bins[image.getPixel(i, j, q)]++;
+					try {
+						bins[image.getPixel(i, j, q)]++;
+					} catch (ImageTooSmallException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			double chiSquare = 0;
@@ -72,15 +77,15 @@ public class ChiSquareMethod implements StegMethod {
 			// TODO More accurate critical values.
 			if (chiSquare < 80)
 			{
-				result[q] = 1;
+				result[q.ordinal()] = 1;
 			}
 			else if (chiSquare < 180)
 			{
-				result[q] = 0.75;
+				result[q.ordinal()] = 0.75;
 			}
 			else
 			{
-				result[q] = 0;
+				result[q.ordinal()] = 0;
 			}
 			executed = true;
 		}

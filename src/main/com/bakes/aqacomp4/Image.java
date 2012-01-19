@@ -8,16 +8,16 @@ package com.bakes.aqacomp4;
  *
  */
 public class Image {
-	private int width;
-	private int height;
-	private int size;
-	private byte[][][] imageData;
-	private String type;
+	private final int width;
+	private final int height;
+	private final int size;
+	private final byte[][][] imageData;
+	private final ImageTypes type;
 
 	/**
 	 * 
 	 */
-	public Image(byte[][][] imageData, String type) {
+	public Image(byte[][][] imageData, ImageTypes type) {
 		this.type = type;
 		this.imageData = imageData;
 		height = imageData.length;
@@ -26,10 +26,18 @@ public class Image {
 	}
 	
 
-	public int getPixel(int xOffset, int yOffset, int colour)
+	public int getPixel(int yOffset, int xOffset, Colour colour) throws ImageTooSmallException, IllegalArgumentException
 	{
 		/* Remove the sign. */
-		return 0xFF & imageData[yOffset][xOffset][colour];
+		if (yOffset >= height || xOffset >= width)
+		{
+			throw new ImageTooSmallException();
+		}
+		else if (yOffset < 0 || xOffset < 0)
+		{
+			throw new IllegalArgumentException();
+		}
+		return 0xFF & imageData[yOffset][xOffset][colour.ordinal()];
 	}
 	
 	public int getSize()
@@ -47,7 +55,7 @@ public class Image {
 		return height;
 	}
 	
-	public String getType()
+	public ImageTypes getType()
 	{
 		return type;
 	}
