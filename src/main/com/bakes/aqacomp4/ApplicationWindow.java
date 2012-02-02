@@ -11,12 +11,14 @@ import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 public class ApplicationWindow {
-
-	private JFrame frmStegfinder;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JFrame application;
+	private JTextField sourcePath;
+	private JTextField outputPath;
+	
 	private JTable table;
 
 	/**
@@ -27,7 +29,7 @@ public class ApplicationWindow {
 			public void run() {
 				try {
 					ApplicationWindow window = new ApplicationWindow();
-					window.frmStegfinder.setVisible(true);
+					window.application.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -46,125 +48,144 @@ public class ApplicationWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmStegfinder = new JFrame();
-		frmStegfinder.setTitle("Stegfinder");
-		frmStegfinder.setBounds(100, 100, 766, 493);
-		frmStegfinder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		frmStegfinder.getContentPane().setLayout(gridBagLayout);
+		// Make the application window.
+		application = new JFrame();
+		application.setResizable(false); // TODO Resizing disabled to make laying out easier. May investigate minimum sizes.
+		application.setBounds(100, 100, 677, 390); // Place the application in its default position.
+		application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // The application needs to exit when this is closed.
+		application.setTitle("Stegfinder"); //TODO Redo with constant of some kind.
 		
-		JButton btnSource = new JButton("Source");
-		GridBagConstraints gbc_btnSource = new GridBagConstraints();
-		gbc_btnSource.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSource.gridx = 0;
-		gbc_btnSource.gridy = 0;
-		frmStegfinder.getContentPane().add(btnSource, gbc_btnSource);
+		//Initialize the 'Gridbaglayout' used to lay the components.
+		GridBagLayout layout = new GridBagLayout();
+		layout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		layout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		layout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		application.getContentPane().setLayout(layout);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.gridwidth = 5;
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 0;
-		frmStegfinder.getContentPane().add(textField, gbc_textField);
-		textField.setColumns(10);
+		// The button that selects different input files.
+		JButton inputSelector = new JButton("Source");
+		GridBagConstraints inputSelectorConstraints = new GridBagConstraints();
+		inputSelectorConstraints.insets = new Insets(5, 0, 5, 0);
+		inputSelectorConstraints.gridx = 0;
+		inputSelectorConstraints.gridy = 0;
+		application.getContentPane().add(inputSelector, inputSelectorConstraints);
+		
+		// The text field that stores file paths.
+		sourcePath = new JTextField();
+		sourcePath.setEditable(false);
+		GridBagConstraints sourcePathConstraints = new GridBagConstraints();
+		sourcePathConstraints.insets = new Insets(5, 5, 5, 5);
+		sourcePathConstraints.gridwidth = 5;
+		sourcePathConstraints.fill = GridBagConstraints.HORIZONTAL;
+		sourcePathConstraints.gridx = 1;
+		sourcePathConstraints.gridy = 0;
+		application.getContentPane().add(sourcePath, sourcePathConstraints);
+		
+		// TODO Method specific buttons. To be made procedural in a later stage.
 		
 		JCheckBox chckbxSpam = new JCheckBox("SPAM");
 		GridBagConstraints gbc_chckbxSpam = new GridBagConstraints();
 		gbc_chckbxSpam.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxSpam.gridx = 0;
 		gbc_chckbxSpam.gridy = 1;
-		frmStegfinder.getContentPane().add(chckbxSpam, gbc_chckbxSpam);
+		application.getContentPane().add(chckbxSpam, gbc_chckbxSpam);
 		
 		JButton btnSpamSettings = new JButton("SPAM Settings");
 		GridBagConstraints gbc_btnSpamSettings = new GridBagConstraints();
 		gbc_btnSpamSettings.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSpamSettings.gridx = 1;
 		gbc_btnSpamSettings.gridy = 1;
-		frmStegfinder.getContentPane().add(btnSpamSettings, gbc_btnSpamSettings);
+		application.getContentPane().add(btnSpamSettings, gbc_btnSpamSettings);
 		
 		JCheckBox chckbxChiSquare = new JCheckBox("Chi Square");
 		GridBagConstraints gbc_chckbxChiSquare = new GridBagConstraints();
 		gbc_chckbxChiSquare.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxChiSquare.gridx = 2;
 		gbc_chckbxChiSquare.gridy = 1;
-		frmStegfinder.getContentPane().add(chckbxChiSquare, gbc_chckbxChiSquare);
+		application.getContentPane().add(chckbxChiSquare, gbc_chckbxChiSquare);
 		
 		JCheckBox chckbxRs = new JCheckBox("RS");
 		GridBagConstraints gbc_chckbxRs = new GridBagConstraints();
 		gbc_chckbxRs.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxRs.gridx = 3;
 		gbc_chckbxRs.gridy = 1;
-		frmStegfinder.getContentPane().add(chckbxRs, gbc_chckbxRs);
+		application.getContentPane().add(chckbxRs, gbc_chckbxRs);
 		
 		JCheckBox chckbxPairs = new JCheckBox("Pairs");
 		GridBagConstraints gbc_chckbxPairs = new GridBagConstraints();
 		gbc_chckbxPairs.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxPairs.gridx = 4;
 		gbc_chckbxPairs.gridy = 1;
-		frmStegfinder.getContentPane().add(chckbxPairs, gbc_chckbxPairs);
+		application.getContentPane().add(chckbxPairs, gbc_chckbxPairs);
 		
-		JButton btnAddToQueue = new JButton("Add to Queue");
-		GridBagConstraints gbc_btnAddToQueue = new GridBagConstraints();
-		gbc_btnAddToQueue.insets = new Insets(0, 0, 5, 5);
-		gbc_btnAddToQueue.gridx = 5;
-		gbc_btnAddToQueue.gridy = 1;
-		frmStegfinder.getContentPane().add(btnAddToQueue, gbc_btnAddToQueue);
+		JButton queueAdd = new JButton("Add to Queue");
+		GridBagConstraints queueAddConstraints = new GridBagConstraints();
+		queueAddConstraints.insets = new Insets(0, 0, 5, 0);
+		queueAddConstraints.gridx = 5;
+		queueAddConstraints.gridy = 1;
+		application.getContentPane().add(queueAdd, queueAddConstraints);
 		
-		JButton btnOutput = new JButton("Output");
-		GridBagConstraints gbc_btnOutput = new GridBagConstraints();
-		gbc_btnOutput.insets = new Insets(0, 0, 5, 5);
-		gbc_btnOutput.gridx = 0;
-		gbc_btnOutput.gridy = 2;
-		frmStegfinder.getContentPane().add(btnOutput, gbc_btnOutput);
+		JButton selectOutput = new JButton("Output");
+		GridBagConstraints selectOutputConstraints = new GridBagConstraints();
+		selectOutputConstraints.insets = new Insets(0, 0, 5, 5);
+		selectOutputConstraints.gridx = 0;
+		selectOutputConstraints.gridy = 2;
+		application.getContentPane().add(selectOutput, selectOutputConstraints);
 		
-		textField_1 = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.gridwidth = 2;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 2;
-		frmStegfinder.getContentPane().add(textField_1, gbc_textField_1);
-		textField_1.setColumns(10);
+		outputPath = new JTextField();
+		outputPath.setEditable(false);
+		outputPath.setColumns(10);
+		GridBagConstraints outputPathConstraints = new GridBagConstraints();
+		outputPathConstraints.gridwidth = 2;
+		outputPathConstraints.insets = new Insets(0, 0, 5, 5);
+		outputPathConstraints.fill = GridBagConstraints.HORIZONTAL;
+		outputPathConstraints.gridx = 1;
+		outputPathConstraints.gridy = 2;
+		application.getContentPane().add(outputPath, outputPathConstraints);
 		
-		JCheckBox chckbxCsvReport = new JCheckBox("CSV Report");
-		GridBagConstraints gbc_chckbxCsvReport = new GridBagConstraints();
-		gbc_chckbxCsvReport.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxCsvReport.gridx = 3;
-		gbc_chckbxCsvReport.gridy = 2;
-		frmStegfinder.getContentPane().add(chckbxCsvReport, gbc_chckbxCsvReport);
+		JCheckBox csvReportRequired = new JCheckBox("CSV Report");
+		GridBagConstraints csvReportConstraints = new GridBagConstraints();
+		csvReportConstraints.insets = new Insets(0, 0, 5, 5);
+		csvReportConstraints.gridx = 3;
+		csvReportConstraints.gridy = 2;
+		application.getContentPane().add(csvReportRequired, csvReportConstraints);
 		
-		JCheckBox chckbxPdfReport = new JCheckBox("PDF Report");
-		GridBagConstraints gbc_chckbxPdfReport = new GridBagConstraints();
-		gbc_chckbxPdfReport.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxPdfReport.gridx = 4;
-		gbc_chckbxPdfReport.gridy = 2;
-		frmStegfinder.getContentPane().add(chckbxPdfReport, gbc_chckbxPdfReport);
+		JCheckBox pdfReportRequired = new JCheckBox("PDF Report");
+		GridBagConstraints pdfReportConstraints = new GridBagConstraints();
+		pdfReportConstraints.insets = new Insets(0, 0, 5, 5);
+		pdfReportConstraints.gridx = 4;
+		pdfReportConstraints.gridy = 2;
+		application.getContentPane().add(pdfReportRequired, pdfReportConstraints);
 		
-		JButton btnStart = new JButton("Start");
-		GridBagConstraints gbc_btnStart = new GridBagConstraints();
-		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
-		gbc_btnStart.gridx = 5;
-		gbc_btnStart.gridy = 2;
-		frmStegfinder.getContentPane().add(btnStart, gbc_btnStart);
+		JButton startStop = new JButton("Start");
+		GridBagConstraints startStopConstraints = new GridBagConstraints();
+		startStopConstraints.insets = new Insets(0, 0, 5, 0);
+		startStopConstraints.gridx = 5;
+		startStopConstraints.gridy = 2;
+		application.getContentPane().add(startStop, startStopConstraints);
+		
+		// TODO The scrollpane is necessary for the table - so that there can be an 'unlimited' number of items in the queue.
 		
 		JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridheight = 5;
-		gbc_scrollPane.gridwidth = 6;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 0;
-		gbc_scrollPane.gridy = 3;
-		frmStegfinder.getContentPane().add(scrollPane, gbc_scrollPane);
+		GridBagConstraints scrollPaneConstraints = new GridBagConstraints();
+		scrollPaneConstraints.insets = new Insets(0, 5, 5, 5);
+		scrollPaneConstraints.gridheight = 8;
+		scrollPaneConstraints.gridwidth = 6;
+		scrollPaneConstraints.fill = GridBagConstraints.BOTH;
+		scrollPaneConstraints.gridx = 0;
+		scrollPaneConstraints.gridy = 3;
+		application.getContentPane().add(scrollPane, scrollPaneConstraints);
 		
-		table = new JTable();
+	    TableModel dataModel = new AbstractTableModel() {
+	          public int getColumnCount() { return 10; }
+	          public int getRowCount() { return 40;}
+	          public Object getValueAt(int row, int col) { return new Integer(row*col); }
+	      };
+	   
+	    // Add the table to the scrollpane.
+	      
+	    table = new JTable(dataModel);
 		scrollPane.setViewportView(table);
 	}
 
