@@ -5,6 +5,11 @@ package com.bakes.aqacomp4;
 
 import java.io.File;
 
+import libsvm.svm_model;
+import libsvm.svm_parameter;
+import libsvm.svm_problem;
+
+
 import org.encog.ml.MLRegression;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
@@ -18,12 +23,12 @@ import org.encog.persist.EncogDirectoryPersistence;
  * @author bakes
  *
  */
-public class SPAMTrainSVM {
+public class SPAMTrainSVMLibSVM {
 
 	
 	public static void main(String[] args)
 	{
-		SPAMTrainSVM s = new SPAMTrainSVM();
+		SPAMTrainSVMLibSVM s = new SPAMTrainSVMLibSVM();
 		s.trainAndSave();	
 	}
 	
@@ -38,6 +43,25 @@ public class SPAMTrainSVM {
 		final int features = trainingSet.get(0).getInputArray().length;
 		System.out.println(features);
 		SVM network = new SVM(features, false);
+		
+		svm_parameter param = new svm_parameter();
+		
+		param.svm_type = svm_parameter.C_SVC;
+		param.kernel_type = svm_parameter.RBF;
+		param.degree = 3;
+		param.gamma = 0;
+		param.coef0 = 0;
+		param.nu = 0.5;
+		param.cache_size = 40;
+		param.C = 1;
+		param.eps = 1e-3;
+		param.p = 0.1;
+		param.shrinking = 1;
+		param.probability = 0;
+		param.nr_weight = 0;
+		param.weight_label = new int[0];
+		param.weight = new double[0];
+		
 		final SVMTrain train = new SVMTrain(network, trainingSet);
 		double bestC=0;
 		double bestGamma=0;
@@ -84,7 +108,7 @@ public class SPAMTrainSVM {
 	{
 		SPAMMethod s = new SPAMMethod();
 		BasicImporter b = new BasicImporter();
-		
+		svm_problem prob = new svm_problem();
 		final String suffix = ".bmp";
 		double[][] expected = new double[numImages][1];
 		double[][] features = new double[numImages][];
@@ -106,6 +130,8 @@ public class SPAMTrainSVM {
 				System.out.println(i);
 			}
 		}
+		prob.l = numImages;
+		prob.y = new double[numImages];
 		
 		return new BasicMLDataSet(features, expected);
 	}

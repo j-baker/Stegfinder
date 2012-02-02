@@ -4,6 +4,7 @@
 package com.bakes.aqacomp4;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
@@ -62,7 +63,7 @@ public class SPAMMethod implements StegMethod {
 	
 	public static void main(String[] args)
 	{
-		Image i = new BasicImporter().importImage("kosmo_0.bmp");
+		Image i = new BasicImporter().importImage("res/kosmo_0.bmp");
 		SPAMMethod s = new SPAMMethod();
 		s.getSPAMFeatures(i);
 		//s.tester();
@@ -71,10 +72,12 @@ public class SPAMMethod implements StegMethod {
 	double[][] getSPAMFeatures(Image image)
 	{
 		final boolean lessFeatures = false;
+		final boolean newLessFeatures = false;
 		
 		int numColours = 1;
-		int[][][][][] counts = new int[numColours][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
-		int[][][][] maxCounts = new int[numColours][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
+		int[][][][][] counts = new int[Colour.length()][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
+		int[][][][] maxCounts = new int[Colour.length()][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
+		int[][][] countsFO = new int[Colour.length()][8][2*MAX_DIFFERENCE+1];
 		
 		for (Colour q : Colour.values())
 		{
@@ -98,6 +101,7 @@ public class SPAMMethod implements StegMethod {
 										{
 											counts[q.ordinal()][directionToArray(offsetX, offsetY)][MAX_DIFFERENCE+difference1][MAX_DIFFERENCE+difference2][MAX_DIFFERENCE+difference3]++;
 											maxCounts[q.ordinal()][directionToArray(offsetX, offsetY)][MAX_DIFFERENCE+difference1][MAX_DIFFERENCE+difference2]++;
+											countsFO[q.ordinal()][directionToArray(offsetX, offsetY)][MAX_DIFFERENCE+difference1]++;
 										}
 									} catch (ImageTooSmallException e) {
 										// TODO Auto-generated catch block
@@ -123,23 +127,92 @@ public class SPAMMethod implements StegMethod {
 		{
 			result = new double[numColours][2*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)];
 		}
-		
+		final int offset = 3;
+		int bigCount = 0;
 		for (Colour q : Colour.values())
 		{
 			int count = 0;
 			for (int i = 0; i < counts[0][0].length; i++)
 			{
-				for (int j = 0; j < counts[0][0][0].length; j++)
+				for (int j = (lessFeatures ? MAX_DIFFERENCE: 0); j < counts[0][0][0].length; j++)
 				{
-					for (int k = (lessFeatures ? MAX_DIFFERENCE: 0); k < counts[0][0][0][0].length; k++)
+						for (int k = 0; k < counts[0][0][0][0].length; k++)
+						{
+							if (!newLessFeatures)
+							{
+								result[q.ordinal()][count] = (counts[q.ordinal()][0][i][j][k]+counts[q.ordinal()][2][i][j][k]+counts[q.ordinal()][4][i][j][k]+counts[q.ordinal()][6][i][j][k]+0.0)/(maxCounts[q.ordinal()][0][i][j]+maxCounts[q.ordinal()][2][i][j]+maxCounts[q.ordinal()][4][i][j]+maxCounts[q.ordinal()][6][i][j]);
+								result[q.ordinal()][count+1] = (counts[q.ordinal()][1][i][j][k]+counts[q.ordinal()][3][i][j][k]+counts[q.ordinal()][5][i][j][k]+counts[q.ordinal()][7][i][j][k]+0.0)/(maxCounts[q.ordinal()][1][i][j]+maxCounts[q.ordinal()][3][i][j]+maxCounts[q.ordinal()][5][i][j]+maxCounts[q.ordinal()][7][i][j]);	
+								count += 2;
+							}
+							else
+							{
+								int u = k;
+								int v = j;
+								int w = i;
+								
+								if (u - offset < 0 && w - offset <= 0)
+								{
+									
+								}
+								else if (v - offset < 0 && w - offset <= 0)
+								{
+									
+								}
+								else
+								{
+									result[q.ordinal()][count] = (counts[q.ordinal()][0][i][j][k]+counts[q.ordinal()][2][i][j][k]+counts[q.ordinal()][4][i][j][k]+counts[q.ordinal()][6][i][j][k]+0.0)/(maxCounts[q.ordinal()][0][i][j]+maxCounts[q.ordinal()][2][i][j]+maxCounts[q.ordinal()][4][i][j]+maxCounts[q.ordinal()][6][i][j]);
+									result[q.ordinal()][count+1] = (counts[q.ordinal()][1][i][j][k]+counts[q.ordinal()][3][i][j][k]+counts[q.ordinal()][5][i][j][k]+counts[q.ordinal()][7][i][j][k]+0.0)/(maxCounts[q.ordinal()][1][i][j]+maxCounts[q.ordinal()][3][i][j]+maxCounts[q.ordinal()][5][i][j]+maxCounts[q.ordinal()][7][i][j]);	
+									count += 2;
+								}
+								
+							}
+						}
+				}
+			}
+			bigCount = count;
+			//System.out.println(bigCount);
+		}
+		double[][] newResult = new double[Colour.length()][bigCount+1];
+		for (Colour q : Colour.values()){
+			for (int i = 0; i < newResult.length; i++)
+			{
+				newResult[q.ordinal()][i] = result[q.ordinal()][i];
+			}
+		}
+		/*P(C|B)P(B) = P(B|A)P(A), Pr(d+2 = A, d+1 = B, d = C*/
+		double[] results = new double[343];
+
+		for (Colour q : Colour.values()){
+			int count = 0;
+			for (int dir = 0; dir < 8; dir++)
+			{
+				for (int a = 0; a < counts[0][0].length; a++)
+				{
+					for (int b = 0; b < counts[0][0][0].length; b++)
 					{
-						result[q.ordinal()][count] = (counts[q.ordinal()][0][i][j][k]+counts[q.ordinal()][2][i][j][k]+counts[q.ordinal()][4][i][j][k]+counts[q.ordinal()][6][i][j][k]+0.0)/(maxCounts[q.ordinal()][0][i][j]+maxCounts[q.ordinal()][2][i][j]+maxCounts[q.ordinal()][4][i][j]+maxCounts[q.ordinal()][6][i][j]);
-						result[q.ordinal()][count+1] = (counts[q.ordinal()][1][i][j][k]+counts[q.ordinal()][3][i][j][k]+counts[q.ordinal()][5][i][j][k]+counts[q.ordinal()][7][i][j][k]+0.0)/(maxCounts[q.ordinal()][1][i][j]+maxCounts[q.ordinal()][3][i][j]+maxCounts[q.ordinal()][5][i][j]+maxCounts[q.ordinal()][7][i][j]);	
-						count += 2;
+						for (int c = 0; c < counts[0][0][0][0].length; c++)
+						{
+							double pCgivenB = maxCounts[q.ordinal()][dir][b][a];
+							double pBgivenA = maxCounts[q.ordinal()][dir][c][b];
+							if (dir == 2)
+							{
+								results[count] =pCgivenB/pBgivenA;
+								count++;	
+								System.out.println(pCgivenB/pBgivenA);
+							}
+						}
 					}
 				}
 			}
 		}
+		double sum = 0;
+		for (int i = 0; i < 343; i++)
+		{
+			sum += results[i];
+		}
+		System.out.println("Result: "+sum/343+" Sum"+sum);
+		
+		//System.out.println(result.length);
 		return result;
 	}
 	

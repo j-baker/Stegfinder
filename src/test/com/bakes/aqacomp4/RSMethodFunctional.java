@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RSMethodFunctional {
-	static final String prefix = "res/test/kosmo_";
+	static final String prefix = "res/kosmo_";
 	static final String suffix = ".bmp";
 	ImageImporter importer = new BasicImporter();
 	StegMethod s;
@@ -42,7 +42,7 @@ public class RSMethodFunctional {
 			}
 			try {
 				double[] result = s.getNumericalResult();
-				for (int j = 0; j < 3; j++)
+				for (int j = 0; j < 1; j++)
 				{
 					if (result[j] + ERROR_MARGIN < i*0.01 || result[j] - ERROR_MARGIN > i*0.01)
 					{

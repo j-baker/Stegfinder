@@ -3,6 +3,8 @@
  */
 package com.bakes.aqacomp4;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
+import javax.swing.JList;
+import javax.swing.AbstractListModel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * @author bakes
@@ -39,8 +46,8 @@ public class MainWindow implements ActionListener {
 	private JFrame frame;
 
 	private JButton btnRun;
-
-	private JTextPane txtpnHi;
+	private JScrollPane scrollPane;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -120,7 +127,7 @@ public class MainWindow implements ActionListener {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 579, 302);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow][176.00,grow][27.00,grow][]", "[][][grow]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow][176.00,grow][27.00,grow][]", "[][][63.00,grow][]"));
 		
 		btnBrowse = new JButton("Browse");
 		frame.getContentPane().add(btnBrowse, "cell 0 0");
@@ -150,10 +157,27 @@ public class MainWindow implements ActionListener {
 		frame.getContentPane().add(btnRun, "cell 3 1");
 		btnRun.addActionListener(this);
 		
-		txtpnHi = new JTextPane();
-		txtpnHi.setEditable(false);
-		txtpnHi.setText(boxText);
-		frame.getContentPane().add(txtpnHi, "cell 0 2 4 1,grow");
+		scrollPane = new JScrollPane();
+		frame.getContentPane().add(scrollPane, "cell 0 3 4 1,grow");
+		
+		String sampleData[][] =
+			{
+				{"1.bmp", "RS_METHOD", "BITMAP", "0.93", "DONE"},
+				{"2.bmp", "RS_METHOD", "BITMAP", "", "2 seconds"},
+				{"3.bmp", "CHISQUARE_METHOD", "BITMAP", "", "0.1 seconds"},
+			};
+		
+		String col[] = {"File name","Steganography Method","Image Type","Result","ETA"};
+		
+		
+		
+		table = new JTable(sampleData, col);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
+		table.getTableHeader().setResizingAllowed(false);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.setFillsViewportHeight(true);
+		scrollPane.setViewportView(table);
 	}
 
 }

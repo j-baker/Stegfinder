@@ -10,14 +10,15 @@ public class BulkStego {
 	 */
 	public static void main(String[] args) {
 		BulkStego b = new BulkStego();
-		b.run("res/bows2/training/", 0, 0.05);
-		b.run("res/bows2/testing/", 1, 0.05);
+		//b.run("res/bows2/training/", 0, 0.05);
+		//b.run("res/bows2/testing/", 1, 0.05);
+		b.runNew();
 		// TODO Auto-generated method stub
 
 	}
 	
 	private void runNew() {
-		String prefix = "kosmo";
+		String prefix = "res/kosmo";
 		String suffix = ".bmp";
 		String splitter = "_";
 		int interval = 5;
@@ -26,7 +27,7 @@ public class BulkStego {
 			String fileName = prefix + splitter + i + suffix;
 			Steganography s = new Steganography();
 			s.loadFile(prefix+suffix);
-			byte[] message = s.loadFileToByteArray("stego");
+			byte[] message = s.loadFileToByteArray("res/stego");
 			s.encodeByteArray(message, i+100, i*0.01);
 			s.writeFile(fileName);
 			System.out.println(i);
