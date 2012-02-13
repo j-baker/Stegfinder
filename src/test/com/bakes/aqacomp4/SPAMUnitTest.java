@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bakes.aqacomp4.imagetools.Image;
+
 public class SPAMUnitTest {
 	Image i;
 	byte[][] differencesRight;

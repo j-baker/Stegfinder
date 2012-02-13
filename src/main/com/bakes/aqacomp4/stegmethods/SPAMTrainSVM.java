@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.stegmethods;
 
 import java.io.File;
 
@@ -13,6 +13,9 @@ import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMTrain;
 import org.encog.persist.EncogDirectoryPersistence;
+
+import com.bakes.aqacomp4.imagetools.BasicImporter;
+import com.bakes.aqacomp4.imagetools.Image;
 
 /**
  * @author bakes
@@ -31,7 +34,7 @@ public class SPAMTrainSVM {
 	{
 		int numImages = 500;
 		String fileName = "test1";
-		String training = "res/BOWS2/training/";
+		String training = "res/BOWS2/orig/";
 		String testing = "res/BOWS2/testing/";
 		MLDataSet trainingSet = getFeatures(training, 0, 0, 0, numImages);
 		MLDataSet testingSet = getFeatures(testing, 1, 0, numImages, numImages);
@@ -92,6 +95,12 @@ public class SPAMTrainSVM {
 		{
 			Image image = b.importImage(prefix+(i+offset2)+suffix);
 			double[][] imageFeatures = s.getSPAMFeatures(image);
+			/*String s1 = "";
+			for (int j = 0; j < imageFeatures[0].length; j++)
+			{
+				s1+= imageFeatures[0][j] + ",";
+			}
+			System.out.println(s1);*/
 			features[i] = imageFeatures[colour];
 			if (i % 2 == offset)
 			{
@@ -103,7 +112,7 @@ public class SPAMTrainSVM {
 			}
 			if (i % 5 == 0)
 			{
-				System.out.println(i);
+				//System.out.println(i);
 			}
 		}
 		

@@ -1,57 +1,29 @@
 /**
  * 
  */
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.stegmethods;
 
 import java.util.Arrays;
+
+import com.bakes.aqacomp4.Colour;
+import com.bakes.aqacomp4.imagetools.Image;
+import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
 
 /**
  * @author bakes
  *
  */
 public class RSMethod implements StegMethod {
-	private Image image = null;
-	private int size;
-	private double[] result = new double[Colour.length()];
-	private boolean executed = false;
 	static final int GROUPSIZE = 3;
 	
-	public double getTimeEstimate(double benchmark)
-	{
-		return 1/size;
-	}
-
 	@Override
-	public double[] getNumericalResult() throws ImageNotTestedException {
-		if (!executed)
-		{
-			throw new ImageNotTestedException();
-		}
-		return result;
-	}
-
-	@Override
-	public String getTextResult() throws ImageNotTestedException {
-		if (!executed)
-		{
-			throw new ImageNotTestedException();
-		}
-		// TODO Auto-generated method stub
-		return ""+result;
-	}
-
-	@Override
-	public void loadImage(Image i) {
-		image = i;
-		size = image.getSize();
-	}
-
-	@Override
-	public void testImage() throws ImageTooSmallException {
+	public double testImage(Image image) throws ImageTooSmallException {
 		if (image.getWidth() < GROUPSIZE)
 		{
 			throw new ImageTooSmallException();
 		}
+		int resultCount = 0;;
+		double result = 0;
 		int[][] counts = new int[3][9];
 		for (Colour q : Colour.values())
 		{
@@ -127,9 +99,10 @@ public class RSMethod implements StegMethod {
 			
 			double z = (d0-dm0)/(-dm0+dm1+d1+(3*d0));
 
-			result[q.ordinal()] = z/(z-0.5);
+			resultCount++;
+			result += z/(z-0.5);
 		}
-		executed = true;
+		return result/resultCount;
 	}
 	
 	private int calculateNoise(int[] x)

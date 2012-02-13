@@ -5,6 +5,11 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.bakes.aqacomp4.imagetools.BasicImporter;
+import com.bakes.aqacomp4.imagetools.Image;
+import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
+import com.bakes.aqacomp4.imagetools.ImageTypes;
+
 public class ImageTest {
 	BasicImporter b = new BasicImporter();
 	Image i = b.importImage("kosmo_50.bmp");

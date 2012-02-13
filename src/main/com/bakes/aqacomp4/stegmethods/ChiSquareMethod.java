@@ -1,7 +1,11 @@
 /**
  * 
  */
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.stegmethods;
+
+import com.bakes.aqacomp4.Colour;
+import com.bakes.aqacomp4.imagetools.Image;
+import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
 
 
 /**
@@ -9,10 +13,6 @@ package com.bakes.aqacomp4;
  *
  */
 public class ChiSquareMethod implements StegMethod {
-	private Image image = null;
-	private int size;
-	private double[] result = new double[Colour.length()];
-	private boolean executed = false;
 
 	/**
 	 * 
@@ -21,39 +21,10 @@ public class ChiSquareMethod implements StegMethod {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public double getTimeEstimate(double benchmark)
-	{
-		return 1/size;
-	}
-
 	@Override
-	public double[] getNumericalResult() throws ImageNotTestedException {
-		if (!executed)
-		{
-			throw new ImageNotTestedException();
-		}
-		return result;
-	}
-
-	@Override
-	public String getTextResult() throws ImageNotTestedException {
-		if (!executed)
-		{
-			throw new ImageNotTestedException();
-		}
-		// TODO Auto-generated method stub
-		return ""+result;
-	}
-
-	@Override
-	public void loadImage(Image i) {
-		image = i;
-		size = image.getSize();
-		
-	}
-
-	@Override
-	public void testImage() {
+	public double testImage(Image image) {
+		int numResults = 0;
+		double result = 0;
 		for (Colour q : Colour.values())
 		{
 			int[] bins = new int[256];
@@ -75,20 +46,21 @@ public class ChiSquareMethod implements StegMethod {
 				chiSquare += Math.pow((bins[2*i] - bins[2*i+1])/2, 2)/((bins[2*i] + bins[2*i +1])/2);
 			}
 			// TODO More accurate critical values.
+			numResults++;
 			if (chiSquare < 80)
 			{
-				result[q.ordinal()] = 1;
+				result += 1;
 			}
 			else if (chiSquare < 180)
 			{
-				result[q.ordinal()] = 0.75;
+				result += 0.75;
 			}
 			else
 			{
-				result[q.ordinal()] = 0;
+				result += 0;
 			}
-			executed = true;
 		}
+		return result/numResults;
 	}
 
 }

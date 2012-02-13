@@ -10,9 +10,9 @@ public class BulkStego {
 	 */
 	public static void main(String[] args) {
 		BulkStego b = new BulkStego();
-		//b.run("res/bows2/training/", 0, 0.05);
-		//b.run("res/bows2/testing/", 1, 0.05);
-		b.runNew();
+		b.run("res/bows2/training/", 0, 0.05);
+		b.run("res/bows2/testing/", 1, 0.05);
+		//b.runNew();
 		// TODO Auto-generated method stub
 
 	}

@@ -1,7 +1,10 @@
 /**
  * 
  */
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.imagetools;
+
+import com.bakes.aqacomp4.Colour;
+
 //TODO I wanted to potentially end up using JPEG images so I didn't use the Java default image.
 /**
  * @author bakes
@@ -28,15 +31,17 @@ public class Image {
 
 	public int getPixel(int yOffset, int xOffset, Colour colour) throws ImageTooSmallException, IllegalArgumentException
 	{
-		/* Remove the sign. */
+		// TODO Throw Exception if image too small.
 		if (yOffset >= height || xOffset >= width)
 		{
 			throw new ImageTooSmallException();
 		}
+		// TODO Throw exception if index is less than zero.
 		else if (yOffset < 0 || xOffset < 0)
 		{
 			throw new IllegalArgumentException();
 		}
+		// TODO Remove the image's sign. Byte is a signed datatype in java.
 		return 0xFF & imageData[yOffset][xOffset][colour.ordinal()];
 	}
 	

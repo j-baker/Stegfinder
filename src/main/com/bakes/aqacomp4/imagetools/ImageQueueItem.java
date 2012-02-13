@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.imagetools;
 
-import java.util.Arrays;
+import com.bakes.aqacomp4.gui.StegTableModel;
+import com.bakes.aqacomp4.stegmethods.StegMethod;
+import com.bakes.aqacomp4.stegmethods.StegMethods;
 
 /**
  * @author bakes
@@ -12,18 +14,19 @@ import java.util.Arrays;
 public class ImageQueueItem {
 	private String imagePath;
 	private boolean hasBeenTested = false;
-	private double[] numericalResult;
-	private String resultAsString;
+	private double result;
+	private StegTableModel table;
 	
 	// Information about which test to use
 	StegMethods method;
 	ImageTypes imageType;
 	
 	
-	public ImageQueueItem(String imagePath, StegMethods method, ImageTypes type) {
+	public ImageQueueItem(String imagePath, StegMethods method, ImageTypes type, StegTableModel table) {
 		this.imagePath = imagePath;
 		this.method = method;
 		this.imageType = type;
+		this.table = table;
 	}
 	
 	public String getImagePath()
@@ -31,20 +34,31 @@ public class ImageQueueItem {
 		return imagePath;
 	}
 	
+	public ImageTypes getImageType()
+	{
+		return imageType;
+	}
+	
+	public StegMethods getStegMethod()
+	{
+		return method;
+	}
+	
 	public void runMethod()
 	{
 		StegMethod method = this.method.getMethod();
 		Image i = (new BasicImporter()).importImage(this.imagePath);
-		method.loadImage(i);
 		try {
-			method.testImage();
-			this.numericalResult = method.getNumericalResult();
-			this.resultAsString = method.getTextResult();
+			this.result = method.testImage(i);
 			this.hasBeenTested = true;
+			table.fireTableDataChanged();
 		} catch (ImageTooSmallException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ImageNotTestedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -56,7 +70,7 @@ public class ImageQueueItem {
 	 * @return A 3-item double array, all items 0 <= x <= 1.
 	 * @throws ImageNotTestedException 
 	 */
-	public double[] getNumericalResult() throws ImageNotTestedException
+	public double getResult() throws ImageNotTestedException
 	{
 		if (!hasBeenTested)
 		{
@@ -64,24 +78,7 @@ public class ImageQueueItem {
 		}
 		else
 		{
-			return numericalResult;
-		}
-	}
-	
-	/**
-	 * Get the result of Steganalysis as a user-friendly String.
-	 * @return A String of any length.
-	 * @throws ImageNotTestedException
-	 */
-	public String getResultAsString() throws ImageNotTestedException
-	{
-		if (!hasBeenTested)
-		{
-			throw new ImageNotTestedException();
-		}
-		else
-		{
-			return Arrays.toString(numericalResult);
+			return result;
 		}
 	}
 

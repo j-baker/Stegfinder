@@ -6,6 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bakes.aqacomp4.imagetools.BasicImporter;
+import com.bakes.aqacomp4.imagetools.ImageImporter;
+import com.bakes.aqacomp4.imagetools.ImageNotTestedException;
+import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
+import com.bakes.aqacomp4.stegmethods.RSMethod;
+import com.bakes.aqacomp4.stegmethods.StegMethod;
+
 public class RSMethodFunctional {
 	static final String prefix = "res/kosmo_";
 	static final String suffix = ".bmp";

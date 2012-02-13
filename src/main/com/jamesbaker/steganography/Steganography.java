@@ -185,21 +185,21 @@ public class Steganography {
 		for (int i = 0; i < BYTESIZE; i++)
 		{
 			int randomOffset = imageDataOffset + getNextImageLinearOffset();
-			if ((fileData[randomOffset] & ((byte) 0x1)) != (c >> (BYTESIZE-1-i)))
+			/*if ((fileData[randomOffset] & ((byte) 0x1)) != (c >> (BYTESIZE-1-i)))
 			{
 				if ((fileData[randomOffset] != 255 || fileData[randomOffset]!=0))
 				{
 					fileData[randomOffset] = changeLastBit(((c >> (BYTESIZE-1-i)) & 0x1), fileData[randomOffset]);	
 				}
-			}
+			}*/
 			
-			/*if ((fileData[randomOffset] & ((byte) 0x1)) != (c >> (BYTESIZE-1-i)))
+			if ((fileData[randomOffset] & ((byte) 0x1)) != (c >> (BYTESIZE-1-i)))
 			{
 				if ((fileData[randomOffset] == 255 || fileData[randomOffset]==0))
 				{
 					
 				}
-				if (randomIncrement.nextBoolean())
+				else if (randomIncrement.nextBoolean())
 				{
 					fileData[randomOffset]++;
 				}
@@ -207,7 +207,7 @@ public class Steganography {
 				{
 					fileData[randomOffset]--;
 				}
-			}*/
+			}
 		}
 			
 	}

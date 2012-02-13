@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.gui;
 
 import java.awt.EventQueue;
 
@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import javax.swing.border.EtchedBorder;
+
 
 /**
  * @author bakes

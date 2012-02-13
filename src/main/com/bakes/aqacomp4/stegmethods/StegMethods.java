@@ -1,4 +1,8 @@
-package com.bakes.aqacomp4;
+package com.bakes.aqacomp4.stegmethods;
+
+import com.bakes.aqacomp4.gui.OptionsWindow;
+import com.bakes.aqacomp4.gui.RSOptionsWindow;
+import com.bakes.aqacomp4.gui.SPAMOptionsWindow;
 
 public enum StegMethods {
 	RS, CHI_SQUARE, SPAM;
@@ -15,7 +19,7 @@ public enum StegMethods {
 		case SPAM:
 			return new SPAMMethod();
 		}
-		// It won't ever get to this part, due to structure of enum. Inserted in order to satisfy compiler!
+		// TODO It won't ever get to this part, due to structure of enum. Inserted in order to satisfy compiler!
 		return null;
 	}
 	
