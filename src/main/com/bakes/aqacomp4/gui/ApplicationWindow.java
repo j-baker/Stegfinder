@@ -242,6 +242,13 @@ public class ApplicationWindow implements ActionListener {
 			}
 			sourcePath.setText("");
 		}
+		else if (source == startStop)
+		{
+			startStop.setText("Stop");
+			(new ProcessImageQueue(tableModel)).execute();
+			
+			startStop.setText("Start");
+		}
 		
 		// TODO Auto-generated method stub
 		
