@@ -3,7 +3,6 @@
  */
 package com.bakes.aqacomp4.imagetools;
 
-import com.bakes.aqacomp4.gui.StegTableModel;
 import com.bakes.aqacomp4.stegmethods.StegMethod;
 import com.bakes.aqacomp4.stegmethods.StegMethods;
 
@@ -15,18 +14,16 @@ public class ImageQueueItem {
 	private String imagePath;
 	private boolean hasBeenTested = false;
 	private double result;
-	private StegTableModel table;
 	
 	// Information about which test to use
 	StegMethods method;
 	ImageTypes imageType;
 	
 	
-	public ImageQueueItem(String imagePath, StegMethods method, ImageTypes type, StegTableModel table) {
+	public ImageQueueItem(String imagePath, StegMethods method, ImageTypes type) {
 		this.imagePath = imagePath;
 		this.method = method;
 		this.imageType = type;
-		this.table = table;
 	}
 	
 	public String getImagePath()
@@ -44,24 +41,32 @@ public class ImageQueueItem {
 		return method;
 	}
 	
-	public void runMethod()
+	public boolean runMethod()
 	{
-		StegMethod method = this.method.getMethod();
-		Image i = (new BasicImporter()).importImage(this.imagePath);
-		try {
-			this.result = method.testImage(i);
-			this.hasBeenTested = true;
-			table.fireTableDataChanged();
-		} catch (ImageTooSmallException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ImageNotTestedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (!hasBeenTested)
+		{
+			StegMethod method = this.method.getMethod();
+			Image i = (new BasicImporter()).importImage(this.imagePath);
+			try {
+				this.result = method.testImage(i);
+				this.hasBeenTested = true;
+			} catch (ImageTooSmallException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ImageNotTestedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			return true;
 		}
+		else
+		{
+			return false;
+		}
+
 		
 	}
 	

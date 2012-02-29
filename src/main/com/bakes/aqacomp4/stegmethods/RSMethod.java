@@ -22,7 +22,7 @@ public class RSMethod implements StegMethod {
 		{
 			throw new ImageTooSmallException();
 		}
-		int resultCount = 0;;
+		int resultCount = 0;
 		double result = 0;
 		int[][] counts = new int[3][9];
 		for (Colour q : Colour.values())

@@ -1,23 +1,33 @@
 package com.bakes.aqacomp4.gui;
+
 import javax.swing.SwingWorker;
 
 import com.bakes.aqacomp4.imagetools.ImageQueueItem;
 
 public class ProcessImageQueue extends SwingWorker<Integer, Integer> {
-	StegTableModel table;
+	ApplicationWindow application;
+	StegTableModel tableModel;
 
-	public ProcessImageQueue(StegTableModel s)
+	public ProcessImageQueue(ApplicationWindow window)
 	{
-		this.table = s;
+		this.application = window;
+		this.tableModel = window.getTable();
 	}
 	
 	@Override
 	protected Integer doInBackground() throws Exception {
-		// TODO Auto-generated method stub
-		for (ImageQueueItem item : table.q)
+		int length = tableModel.items.size();
+		int i = 0;
+		for (ImageQueueItem item : tableModel.items)
 		{
-			item.runMethod();
+			if (item.runMethod())
+			{
+				this.tableModel.fireTableDataChanged();
+			}
+			i++;
+			application.setProgress((i*100)/length);
 		}
+
 		return null;
 	}
 
