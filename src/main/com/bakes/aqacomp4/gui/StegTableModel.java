@@ -11,12 +11,21 @@ public class StegTableModel extends AbstractTableModel {
 	
 	private static final long serialVersionUID = -3445152052420230606L;
 	
-	private String[] columns = {"Filename", "Image Type", "Steganalysis Method", "Result"};
-	LinkedList<ImageQueueItem> items = new LinkedList<ImageQueueItem>();
+	private String[] columns = {"Filename", "Steganalysis Method", "Result"};
+	private LinkedList<ImageQueueItem> items = new LinkedList<ImageQueueItem>();
 	
 	@Override
 	public int getColumnCount() {
 		return columns.length;
+	}
+	
+	/**
+	 * For continuity, should only be used for read-only tasks.
+	 * @return The contents of the queue.
+	 */
+	public LinkedList<ImageQueueItem> getResults()
+	{
+		return items;
 	}
 	
 	@Override
@@ -34,6 +43,18 @@ public class StegTableModel extends AbstractTableModel {
 		items.add(i);
 		fireTableDataChanged();
 	}
+	
+	public void clearQueue()
+	{
+		items.clear();
+		fireTableDataChanged();
+	}
+	
+	public void removeQueueItem(int i)
+	{
+		items.remove(i);
+		fireTableDataChanged();
+	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -42,10 +63,8 @@ public class StegTableModel extends AbstractTableModel {
 		case 0:
 			return item.getImagePath();
 		case 1:
-			return item.getImageType().toString();
-		case 2:
 			return item.getStegMethod().toString();
-		case 3:
+		case 2:
 			try {
 				return ""+item.getResult();
 			} catch (ImageNotTestedException e) {

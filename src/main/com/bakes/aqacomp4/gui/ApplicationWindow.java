@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,8 +22,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
+import com.bakes.aqacomp4.exporter.Export;
 import com.bakes.aqacomp4.imagetools.ImageQueueItem;
-import com.bakes.aqacomp4.imagetools.ImageTypes;
 import com.bakes.aqacomp4.stegmethods.StegMethods;
 
 public class ApplicationWindow implements ActionListener {
@@ -34,11 +35,15 @@ public class ApplicationWindow implements ActionListener {
 	
 	private JButton inputSelector;
 	private JButton queueAdd;
+	private JButton queueRemove;
 	private JButton selectOutput;
 	private JButton startStop;
 	private JProgressBar progress;
 	
-	private HashMap<StegMethods, JCheckBox> stegMethods = new HashMap<StegMethods, JCheckBox>();
+	private JCheckBox pdfExport;
+	private JCheckBox csvExport;
+	
+	private HashMap<StegMethods, JCheckBox> stegMethods = new HashMap<StegMethods, JCheckBox>(); // TODO Explain the hashcode stuff... Hashcode never changes.
 
 
 	/**
@@ -79,7 +84,7 @@ public class ApplicationWindow implements ActionListener {
 	 */
 	private void initialize() {
 		// Make the application window.
-		application = new JFrame();
+		application = new JFrame(); 
 		application.setResizable(false); // TODO Resizing disabled to make laying out easier. May investigate minimum sizes.
 		
 		application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // The application needs to exit when this is closed.
@@ -155,10 +160,19 @@ public class ApplicationWindow implements ActionListener {
 	    table.getTableHeader().setReorderingAllowed(false); 
 		scrollPane.setViewportView(table);
 		
+		queueRemove = new JButton("Remove from Queue");
+		GridBagConstraints queueRemoveConstraints = new GridBagConstraints();
+		queueRemoveConstraints.insets = new Insets(0, 0, 5, 0);
+		queueRemoveConstraints.gridx = 5;
+		queueRemoveConstraints.gridy = 1;
+		queueRemoveConstraints.gridheight = 1 + gridYOffset;
+		queueRemove.addActionListener(this);
+		application.getContentPane().add(queueRemove, queueRemoveConstraints);
+		
 		queueAdd = new JButton("Add to Queue");
 		GridBagConstraints queueAddConstraints = new GridBagConstraints();
 		queueAddConstraints.insets = new Insets(0, 0, 5, 0);
-		queueAddConstraints.gridx = 5;
+		queueAddConstraints.gridx = 4;
 		queueAddConstraints.gridy = 1;
 		queueAddConstraints.gridheight = 1 + gridYOffset;
 		queueAdd.addActionListener(this);
@@ -184,19 +198,23 @@ public class ApplicationWindow implements ActionListener {
 		outputPathConstraints.gridy = 2+gridYOffset+tableHeight;
 		application.getContentPane().add(outputPath, outputPathConstraints);
 		
-		JCheckBox csvReportRequired = new JCheckBox("CSV Report");
+		csvExport = new JCheckBox("CSV Report");
 		GridBagConstraints csvReportConstraints = new GridBagConstraints();
 		csvReportConstraints.insets = new Insets(0, 0, 5, 5);
 		csvReportConstraints.gridx = 3;
 		csvReportConstraints.gridy = 2+gridYOffset+tableHeight;
-		application.getContentPane().add(csvReportRequired, csvReportConstraints);
+		application.getContentPane().add(csvExport, csvReportConstraints);
 		
-		JCheckBox pdfReportRequired = new JCheckBox("PDF Report");
+		pdfExport = new JCheckBox("PDF Report");
 		GridBagConstraints pdfReportConstraints = new GridBagConstraints();
 		pdfReportConstraints.insets = new Insets(0, 0, 5, 5);
 		pdfReportConstraints.gridx = 4;
 		pdfReportConstraints.gridy = 2+gridYOffset+tableHeight;
-		application.getContentPane().add(pdfReportRequired, pdfReportConstraints);
+		if (!Export.PDFExportAllowed())
+		{
+			pdfExport.setEnabled(false);
+		}
+		application.getContentPane().add(pdfExport, pdfReportConstraints);
 		
 		startStop = new JButton("Start");
 		GridBagConstraints startStopConstraints = new GridBagConstraints();
@@ -241,6 +259,15 @@ public class ApplicationWindow implements ActionListener {
 		    	  
 		    }
 		}
+		else if (source == selectOutput)
+		{
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Choose a prefix");
+			if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+				File file = chooser.getSelectedFile();
+				outputPath.setText(file.getAbsolutePath());
+			}
+		}
 		else if (source == queueAdd)
 		{
 			String path = sourcePath.getText();
@@ -248,7 +275,19 @@ public class ApplicationWindow implements ActionListener {
 			File file = new File(path);
 			if (file.isDirectory())
 			{
-				
+				String[] paths = getImagesFromFolder(file);
+				for (int i = 0; i < paths.length; i++)
+				{
+					for (StegMethods s : StegMethods.values())
+					{
+						if (stegMethods.get(s).isSelected())
+						{
+							ImageQueueItem item = new ImageQueueItem(paths[i], s);
+							tableModel.addQueueItem(item);
+							changed = true;
+						}
+					}				
+				}
 			}
 			else if (file.exists() && (path.endsWith(".bmp") || path.endsWith(".png")))
 			{
@@ -256,22 +295,30 @@ public class ApplicationWindow implements ActionListener {
 				{
 					if (stegMethods.get(s).isSelected())
 					{
-						ImageQueueItem i = new ImageQueueItem(path, s, ImageTypes.BITMAP);
+						ImageQueueItem i = new ImageQueueItem(path, s);
 						tableModel.addQueueItem(i);
 						changed = true;
 					}
-				}
-				if (changed)
-				{
-					progress.setValue(0);
-					sourcePath.setText("");
-				}			
+				}		
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(application, "The path provided is not a path to a .bmp or .png file.");
+				JOptionPane.showMessageDialog(application, "The path provided is not valid. Valid paths are paths leading to .png files, .bmp files, or folders.");
 			}
+			if (changed)
+			{
+				progress.setValue(0);
+				sourcePath.setText("");
+			}	
 
+		}
+		else if (source == queueRemove)
+		{
+			int mod = arg0.getModifiers();
+
+	        if ((mod & ActionEvent.SHIFT_MASK) > 0) {
+		        tableModel.clearQueue();
+	        }
 		}
 		else if (source == startStop)
 		{
@@ -279,16 +326,45 @@ public class ApplicationWindow implements ActionListener {
 			(new ProcessImageQueue(this)).execute();
 			
 			startStop.setText("Start");
+			Export exporter = new Export(tableModel, outputPath.getText(), csvExport.isSelected(), pdfExport.isSelected());
+			exporter.exportToFiles();
+			
 		}
 		
 		
 		
 	}
 
+	private String[] getImagesFromFolder(File file) {
+		LinkedList<String> images = new LinkedList<String>();
+		getImagesFromFolder(file, images);
+		return images.toArray(new String[1]);
+	}
+	
+	private void getImagesFromFolder(File folder, LinkedList<String> images)
+	{
+		File[] files = folder.listFiles();
+		for (int i = 0; i < files.length; i++)
+		{
+			if (files[i].isDirectory())
+			{
+				getImagesFromFolder(files[i], images);
+			}
+			else
+			{
+				String filePath = files[i].getAbsolutePath();
+				if (filePath.endsWith(".bmp") || filePath.endsWith(".png"))
+				{
+					images.add(filePath);
+				}
+			}
+		}
+	}
+
 	class ImageFileFilter extends javax.swing.filechooser.FileFilter {
 		@Override
 	    public boolean accept(File f) {
-	        return (f.isDirectory() || f.getName().toLowerCase().endsWith(".bmp") || f.getName().toLowerCase().endsWith(".png")) && !f.getName().toLowerCase().endsWith(".app");
+	        return (f.isDirectory() || f.getName().toLowerCase().endsWith(".bmp") || f.getName().toLowerCase().endsWith(".png")) /*&& !f.getName().toLowerCase().endsWith(".app"))*/; // TODO Constants, let it do it.
 	    }
 	    
 	    @Override

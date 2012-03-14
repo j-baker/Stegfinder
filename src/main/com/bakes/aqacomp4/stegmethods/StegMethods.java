@@ -1,12 +1,31 @@
 package com.bakes.aqacomp4.stegmethods;
 
-import com.bakes.aqacomp4.gui.OptionsWindow;
-import com.bakes.aqacomp4.gui.SPAMOptionsWindow;
+
+
+/***
+ * Dispatcher for the methods of steganography.
+ * 
+ * Each method of steganography is a generic StegMethod. Whilst this means that software that calls one StegMethod can call all StegMethods, in Java methods cannot be referenced.
+ * I thus use a dispatcher. All present methods of steganography are hard-coded into this file. Adding a new method of steganography requires the addition of only two lines.
+ * Running the method getMethod() returns the appropriate StegMethod, ready for use.
+ * 
+ *
+ *@author bakes
+ */
 
 public enum StegMethods {
-	RS, CHI_SQUARE, SPAM, PAIRS, SPAM_CALIBRATED, /*NEW_METHOD*/;
+	RS("RS"), CHI_SQUARE("Chi-Square"), SPAM("SPAM");
 	
+	private String type;
 	
+	StegMethods(String name)
+	{
+		type = name;
+	}
+	
+	/**
+	 * @return The StegMethod linked to the chosen entry in the enum.
+	 */
 	public StegMethod getMethod()
 	{
 		switch(this)
@@ -17,49 +36,19 @@ public enum StegMethods {
 			return new ChiSquareMethod();
 		case SPAM:
 			return new SPAMMethod();
-		case PAIRS:
-			return new RSMethod();
-		case SPAM_CALIBRATED:
-			return new RSMethod();
-		/*case NEW_METHOD:
-			return new RSMethod();*/
 		}
 		// TODO It won't ever get to this part, due to structure of enum. Inserted in order to satisfy compiler!
 		return null;
 	}
 	
 	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Enum#toString()
+	 */
 	public String toString()
 	{
-		switch(this)
-		{
-		case RS:
-			return "RS";
-		case CHI_SQUARE:
-			return "Chi-Square";
-		case SPAM:
-			return "SPAM";
-		case PAIRS:
-			return "Pairs";
-		case SPAM_CALIBRATED:
-			return "SPAM Calibrated";
-		/*case NEW_METHOD:
-			return "New Method";*/
-		}
-		return null;
+		return type;
 	}
-	
-	public OptionsWindow getOptionsWindow()
-	{
-		switch(this)
-		{
-		case RS:
-			return null;
-		case CHI_SQUARE:
-			return null;
-		case SPAM:
-			return new SPAMOptionsWindow();
-		}
-		return null;
-	}
+	// TODO One less data dependency.
 }

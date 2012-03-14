@@ -3,32 +3,69 @@
  */
 package com.bakes.aqacomp4.imagetools;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import com.bakes.aqacomp4.Colour;
 
-//TODO I wanted to potentially end up using JPEG images so I didn't use the Java default image.
 /**
- * @author bakes
+ * Class for the storage of images while they are being used.
+ * 
+ * class Image provides basic methods for use with accessing stored bitmap image data.
  *
+ *@author bakes
  */
+
 public class Image {
 	private final int width;
 	private final int height;
 	private final int size;
+	
+	// imageData[xOffset][yOfffset][colour]
 	private final byte[][][] imageData;
-	private final ImageTypes type;
-
+	
+	
 	/**
-	 * 
+	 * Loads a supported image file (for the purposes of StegFinder, supported image files are 24-bit .bmp and .png files).
+	 * @param fileName The path to the image file. Assumed to be a valid path on the file system, so must be pre-validated.
 	 */
-	public Image(byte[][][] imageData, ImageTypes type) {
-		this.type = type;
-		this.imageData = imageData;
-		height = imageData.length;
-		width = imageData[0].length;
+	public Image(String fileName) {
+		BufferedImage image = openImage(fileName);
+		byte[][][] result;
+		width = image.getWidth();
+		height = image.getHeight();
+		result = new byte[height][width][3];
+			
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				int pixel = image.getRGB(j, i);
+				int red = (pixel & 0x00ff0000) >> 16;
+				int green = (pixel & 0x0000ff00) >> 8;
+				int blue = (pixel & 0x000000ff);
+				result[i][j][0] = (byte) red;
+				result[i][j][1] = (byte) green;
+				result[i][j][2] = (byte) blue;
+			}
+		}
+		this.imageData = result;
 		size = height*width;
 	}
 	
 
+	/**
+	 * Returns the value of a single pixel in the stored image.
+	 * @param yOffset The y-coordinate of the pixel that is being accessed. 0 is considered to be the top of the image.
+	 * @param xOffset The x-coordinate of the pixel that is being accessed. 0 is considered to be the left of the image.
+	 * @param colour The colour channel that is to be accessed.
+	 * @return
+	 * @throws ImageTooSmallException
+	 * @throws IllegalArgumentException
+	 */
 	public int getPixel(int yOffset, int xOffset, Colour colour) throws ImageTooSmallException, IllegalArgumentException
 	{
 		// TODO Throw Exception if image too small.
@@ -45,24 +82,40 @@ public class Image {
 		return 0xFF & imageData[yOffset][xOffset][colour.ordinal()];
 	}
 	
+	/**
+	 * @return number of pixels in image.
+	 */
 	public int getSize()
 	{
 		return size;
 	}
 	
+	/**
+	 * @return width of image (in pixels)
+	 */
 	public int getWidth()
 	{
 		return width;
 	}
 	
+	/**
+	 * @return height of image (in pixels)
+	 */
 	public int getHeight()
 	{
 		return height;
 	}
 	
-	public ImageTypes getType()
+	
+	private BufferedImage openImage(String fileName)
 	{
-		return type;
+		File file = new File(fileName);
+		try {
+			BufferedImage image = ImageIO.read(file);
+			return image;
+		} catch (IOException e){
+			return null;
+		}
 	}
 
 }

@@ -13,8 +13,6 @@ import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMTrain;
 import org.encog.persist.EncogDirectoryPersistence;
-
-import com.bakes.aqacomp4.imagetools.BasicImporter;
 import com.bakes.aqacomp4.imagetools.Image;
 
 /**
@@ -86,14 +84,13 @@ public class SPAMTrainSVM {
 	public MLDataSet getFeatures(String prefix, int offset, int colour, int offset2, final int numImages)
 	{
 		SPAMMethod s = new SPAMMethod();
-		BasicImporter b = new BasicImporter();
 		
 		final String suffix = ".bmp";
 		double[][] expected = new double[numImages][1];
 		double[][] features = new double[numImages][];
 		for (int i = 0; i < numImages; i++)
 		{
-			Image image = b.importImage(prefix+(i+offset2)+suffix);
+			Image image = new Image(prefix+(i+offset2)+suffix);
 			double[][] imageFeatures = s.getSPAMFeatures(image);
 			/*String s1 = "";
 			for (int j = 0; j < imageFeatures[0].length; j++)
@@ -115,7 +112,7 @@ public class SPAMTrainSVM {
 				//System.out.println(i);
 			}
 		}
-		
+	
 		return new BasicMLDataSet(features, expected);
 	}
 

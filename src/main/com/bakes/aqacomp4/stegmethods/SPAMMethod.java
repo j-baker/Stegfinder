@@ -28,11 +28,7 @@ public class SPAMMethod implements StegMethod {
 	}
 
 	@Override
-	public double testImage(Image image) throws Exception {
-		if (network == null)
-		{
-			throw new Exception();
-		}
+	public double testImage(Image image) {
 		double[][] features = getSPAMFeatures(image);
 		double result = 0;
 		int numData = 0;
@@ -47,24 +43,32 @@ public class SPAMMethod implements StegMethod {
 		return result/numData;
 	}
 
+	// The maximum difference that is to be measured during processing. Larger number means much larger processing time.
 	private static final int MAX_DIFFERENCE = 3;
 	
 	double[][] getSPAMFeatures(Image image)
 	{
-		int numColours = 1;
+		// This array represents the numbers of pixels in the image which satisfy the conditions: int[Colour][direction of movement (as determined by the directionToArray function)][root pixel has a difference to the next pixel of value][first pixel along has a difference to the next pixel of value][second pixel along has a difference to the next pixel of value].
 		int[][][][][] counts = new int[Colour.length()][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
+
+		// This array represents the numbers of pixels in the image which satisfy the conditions: int[Colour][direction of movement (as determined by the directionToArray function)][root pixel has a difference to the next pixel of value][first pixel along has a difference to the next pixel of value]
 		int[][][][] maxCounts = new int[Colour.length()][8][2*MAX_DIFFERENCE+1][2*MAX_DIFFERENCE+1];
 		
+		// The outer loop deals with the different colour channels.
 		for (Colour q : Colour.values())
 		{
+			// This loop deals with each row in the image.
 			for (int i = 0; i < image.getHeight(); i++)
 			{
+				// This loop deals with each column in the image.
 				for (int j = 0; j < image.getWidth(); j++)
 				{
+					// The direction is chosen from N, NE, E, SE, S, etc, giving a total of eight different directions. This loop deals with whether the directions should be in the top, middle or bottom row.
 					for (int offsetY = -1; offsetY <= 1; offsetY++)
 					{
 						if (i + (3*offsetY) >= 0 && i+(3*offsetY) < image.getHeight())
 						{
+							// This loop deals with whether the direction should be taken from the left, centre or right column.
 							for (int offsetX = -1; offsetX <= 1; offsetX++)
 							{
 								if (j + (3*offsetX) >= 0 && j+(3*offsetX) < image.getWidth() && !(offsetX == 0 && offsetY ==0))
@@ -91,8 +95,9 @@ public class SPAMMethod implements StegMethod {
 			}
 		}
 		
-		double[][] result = new double[numColours][2*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)];
+		double[][] result = new double[Colour.length()][2*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)*(2*MAX_DIFFERENCE+1)];
 		
+		// Aggregate the contents of the aforementioned arrays into a single, two dimensional array.
 		for (Colour q : Colour.values())
 		{
 			int count = 0;

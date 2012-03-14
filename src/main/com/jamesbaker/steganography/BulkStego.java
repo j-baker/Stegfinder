@@ -1,24 +1,21 @@
 package com.jamesbaker.steganography;
 
-import com.aqa.Console;
-
 public class BulkStego {
-	Console console = new Console();
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		BulkStego b = new BulkStego();
-		b.run("res/bows2/training/", 0, 0.05);
-		b.run("res/bows2/testing/", 1, 0.05);
+		b.run("res/bows2/training/", 0, 0.025);
+		b.run("res/bows2/testing/", 1, 0.025);
 		//b.runNew();
 		// TODO Auto-generated method stub
 
 	}
 	
 	private void runNew() {
-		String prefix = "res/kosmo";
+		String prefix = "res/bows2/sdash";
 		String suffix = ".bmp";
 		String splitter = "_";
 		int interval = 5;

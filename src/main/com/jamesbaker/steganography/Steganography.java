@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
-import com.aqa.Console;
-
 /**
  * @author James Baker
  *
@@ -23,7 +21,6 @@ public class Steganography {
 	int imageDataOffset = 0; // The offset at which the image data array starts.
 	byte[] fileData; // File data, including the assorted headers
 	boolean[] usedBytes; // Used to determine which bytes of the image data have data stored in them.
-	Console console = new Console();
 	final int BMP_OFFSET_LOCATION = 0xA;
 	final int BYTESIZE = 8;
 	final byte LSB_BITMASK = (byte) 0xFE;
@@ -34,78 +31,6 @@ public class Steganography {
 	Random randomIncrement = new Random(); // Used for bit matching.
 	double perc = 0;
 	
-
-	/**
-	 * Just starts the application. Boilerplate code.
-	 */
-	public static void main(String[] args) {
-		Steganography steg = new Steganography();
-		steg.encodeMessageCLI();
-	}
-	
-	/**
-	 * Provides a command line interface to the process of
-	 * encoding text in images (Steganography).
-	 */
-	public void encodeMessageCLI()
-	{
-		boolean isRunning = true;
-		do
-		{
-			console.println(" encode [f]ile");
-			console.println(" encode [w]hitenoise)");
-			console.println(" encode [s]tring");
-			console.println(" de[c]ode file");
-			console.println("[d]ecode string");
-			console.println("[q]uit");
-			
-			char option = console.readChar(">");
-			byte[] message;
-			/* Switch case revision */
-			switch (option)
-			{
-			case 'f':
-				loadFile(console.readLine("Please enter the path to the image file you want encoded: "));
-				message = loadFileToByteArray(console.readLine("Please enter the path to the file you want encoded: "));
-				encodeByteArray(message, console.readInteger("Please enter the integer key you want the message to be distributed with: "), 100);
-				writeFile(console.readLine("Please enter the path to the newly encoded file: "));
-				isRunning=false;
-				break;
-			case 'w':
-				loadFile(console.readLine("Please enter the path to the image file you want encoded: "));
-				message = loadFileToByteArray("geysir.7z");
-				encodeByteArray(message, console.readInteger("Please enter the integer key you want the message to be distributed with: "), console.readInteger("What percentage of the file would you like data to be embedded in? "));
-				writeFile(console.readLine("Please enter the path to the newly encoded file: "));
-				isRunning=false;
-				break;
-			case 's':
-				loadFile(console.readLine("Please enter the path to the image file you want encoded: "));
-				encodeMessage(console.readLine("Please enter the path to the text you want encoded: "), console.readInteger("Please enter the integer key you want the message to be encoded with: "));
-				writeFile(console.readLine("Please enter the path to the newly encoded file: "));
-				isRunning=false;
-				break;
-			case 'd':
-				loadFile(console.readLine("Please enter the path to the image file you want decoded: "));
-				console.println("The decoded message is: "+decodeImage(console.readInteger("Please enter the integer key you want the message to be decoded with: ")));
-				break;
-			case 'c':
-				loadFile(console.readLine("Please enter the path to the image file you want decoded: "));
-				writeByteArrayToFile(console.readLine("Please enter the path to the newly decoded file: "), decodeByteArray(console.readInteger("Please enter the integer key you want the message to be decoded with: ")));
-				break;
-			case 'q':
-				isRunning = false;
-				break;
-			case 't':
-				loadFile("kosmo_cropped.bmp");
-				encodeByteArray(loadFileToByteArray("geysir.7z"), 1337, 100);
-				writeFile("test_output.bmp");
-				isRunning=false;
-				break;
-			default:
-				break;
-			}
-		} while (isRunning);		
-	}
 
 	/**
 	 * Writes a byte array to the hard disk.
