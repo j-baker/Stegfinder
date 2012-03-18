@@ -16,17 +16,26 @@ public class ProcessImageQueue extends SwingWorker<Integer, Integer> {
 	
 	@Override
 	protected Integer doInBackground() throws Exception {
+		application.setProgress(null);
+		application.setStartStopText("Stop");
 		int length = tableModel.getResults().size();
 		int i = 0;
 		for (ImageQueueItem item : tableModel.getResults())
 		{
-			if (item.runMethod())
+			if (!Thread.currentThread().isInterrupted())
 			{
-				this.tableModel.fireTableDataChanged();
+				if (item.runMethod())
+				{
+					this.tableModel.fireTableDataChanged();
+				}
+				i+=100;
+				application.setProgress(i/length);				
 			}
-			i+=100;
-			application.setProgress(i/length);
 		}
+		application.setProgress("Exporting Results");
+		application.getExporter().exportToFiles();
+		application.setProgress("Done");
+		application.setStartStopText("Start");
 
 		return null;
 	}

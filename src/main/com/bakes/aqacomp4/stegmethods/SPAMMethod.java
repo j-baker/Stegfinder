@@ -4,6 +4,7 @@
 package com.bakes.aqacomp4.stegmethods;
 
 import java.io.File;
+import java.util.LinkedList;
 
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
@@ -20,11 +21,19 @@ import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
  *
  */
 public class SPAMMethod implements StegMethod {
-	SVM network = null;
+	LinkedList<SVM> networks =  new LinkedList<SVM>();
 	
-	public void loadSVM(String svmName)
+	public void loadSVMS()
 	{
-		network = (SVM)EncogDirectoryPersistence.loadObject(new File(svmName));
+		File f = new File("svms/");
+		File[] files = f.listFiles();
+		for (File w : files)
+		{
+			if (w.getName().matches("SVM\\d+.eg"))
+			{
+				networks.add((SVM)EncogDirectoryPersistence.loadObject(w));
+			}
+		}
 	}
 
 	@Override
@@ -32,12 +41,15 @@ public class SPAMMethod implements StegMethod {
 		double[][] features = getSPAMFeatures(image);
 		double result = 0;
 		int numData = 0;
-		for (int i = 0; i < 3; i++)
+		for (SVM network : networks)
 		{
-			numData++;
-			MLData d = new BasicMLData(features[i]);
-			d = network.compute(d);
-			result += d.getData(0);
+			for (int i = 0; i < 3; i++)
+			{
+				numData++;
+				MLData d = new BasicMLData(features[i]);
+				d = network.compute(d);
+				result += d.getData(0);
+			}			
 		}
 		// TODO Why mean?
 		return result/numData;
@@ -118,6 +130,13 @@ public class SPAMMethod implements StegMethod {
 		return result;
 	}
 	
+	
+	/**
+	 * Convert a grid direction to an array index. (0,1) corresponds to N, (1, 1) corresponds to NE, (1, 0) corresponds to E, etc
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	int directionToArray(int x, int y)
 	{
 		if (x == 0 && y == 1)

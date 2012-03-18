@@ -32,6 +32,7 @@ public class ApplicationWindow implements ActionListener {
 	private JTextField outputPath;
 	
 	private StegTableModel tableModel;
+	private JTable table;
 	
 	private JButton inputSelector;
 	private JButton queueAdd;
@@ -42,6 +43,12 @@ public class ApplicationWindow implements ActionListener {
 	
 	private JCheckBox pdfExport;
 	private JCheckBox csvExport;
+	
+	private Export exporter = null;
+	
+	private boolean isRunning = false;
+	
+	private ProcessImageQueue processor = null;
 	
 	private HashMap<StegMethods, JCheckBox> stegMethods = new HashMap<StegMethods, JCheckBox>(); // TODO Explain the hashcode stuff... Hashcode never changes.
 
@@ -70,6 +77,11 @@ public class ApplicationWindow implements ActionListener {
 	public void setProgress(int progress)
 	{
 		this.progress.setValue(progress);
+	}
+	
+	public void setProgress(String progress)
+	{
+		this.progress.setString(progress);
 	}
 
 	/**
@@ -156,7 +168,7 @@ public class ApplicationWindow implements ActionListener {
 		
 	    // Add the table to the scrollpane.
 	    tableModel = new StegTableModel();
-	    JTable table = new JTable(tableModel);
+	    table = new JTable(tableModel);
 	    table.getTableHeader().setReorderingAllowed(false); 
 		scrollPane.setViewportView(table);
 		
@@ -319,20 +331,35 @@ public class ApplicationWindow implements ActionListener {
 	        if ((mod & ActionEvent.SHIFT_MASK) > 0) {
 		        tableModel.clearQueue();
 	        }
+	        else
+	        {
+	        	tableModel.removeSelected(table);
+	        }
 		}
 		else if (source == startStop)
 		{
-			startStop.setText("Stop");
-			(new ProcessImageQueue(this)).execute();
-			
-			startStop.setText("Start");
-			Export exporter = new Export(tableModel, outputPath.getText(), csvExport.isSelected(), pdfExport.isSelected());
-			exporter.exportToFiles();
+			if (isRunning)
+			{
+				processor.cancel(true);
+				isRunning = false;
+			}
+			else
+			{
+				exporter = new Export(tableModel, outputPath.getText(), csvExport.isSelected(), pdfExport.isSelected());
+				processor = new ProcessImageQueue(this);
+				processor.execute();
+				isRunning = true;
+			}
 			
 		}
 		
 		
 		
+	}
+	
+	public Export getExporter()
+	{
+		return exporter;
 	}
 
 	private String[] getImagesFromFolder(File file) {
@@ -371,6 +398,10 @@ public class ApplicationWindow implements ActionListener {
 	    public String getDescription() {
 	        return "Supported files";
 	    }
+	}
+
+	public void setStartStopText(String string) {
+		startStop.setText(string);
 	}
 
 }

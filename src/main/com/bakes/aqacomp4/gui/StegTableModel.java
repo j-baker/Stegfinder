@@ -2,6 +2,7 @@ package com.bakes.aqacomp4.gui;
 
 import java.util.LinkedList;
 
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import com.bakes.aqacomp4.imagetools.ImageNotTestedException;
@@ -53,7 +54,6 @@ public class StegTableModel extends AbstractTableModel {
 	public void removeQueueItem(int i)
 	{
 		items.remove(i);
-		fireTableDataChanged();
 	}
 
 	@Override
@@ -73,6 +73,16 @@ public class StegTableModel extends AbstractTableModel {
 		default:
 			return null;
 		}
+	}
+
+	public void removeSelected(JTable table) {
+		int numSelectedRows = table.getSelectedRows().length;
+		for (int i = 0; i < numSelectedRows; i++)
+		{
+			removeQueueItem(table.getSelectedRow());
+		}
+		fireTableDataChanged();
+		
 	}
 
 }
