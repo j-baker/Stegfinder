@@ -1,7 +1,5 @@
 package com.bakes.aqacomp4.stegmethods;
 
-
-
 /***
  * Dispatcher for the methods of steganography.
  * 

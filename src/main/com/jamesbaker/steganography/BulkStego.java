@@ -7,15 +7,15 @@ public class BulkStego {
 	 */
 	public static void main(String[] args) {
 		BulkStego b = new BulkStego();
-		b.run("res/bows2/training/", 0, 0.025);
-		b.run("res/bows2/testing/", 1, 0.025);
+		b.run("res/bows2/training/", 0, 0.1);
+		b.run("res/bows2/testing/", 1, 0.1);
 		//b.runNew();
 		// TODO Auto-generated method stub
 
 	}
 	
 	private void runNew() {
-		String prefix = "res/bows2/sdash";
+		String prefix = "res/bows2/testing";
 		String suffix = ".bmp";
 		String splitter = "_";
 		int interval = 5;

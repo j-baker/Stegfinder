@@ -4,6 +4,7 @@
 package com.bakes.aqacomp4.stegmethods;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.encog.ml.data.MLData;
@@ -29,7 +30,7 @@ public class SPAMMethod implements StegMethod {
 		File[] files = f.listFiles();
 		for (File w : files)
 		{
-			if (w.getName().matches("SVM\\d+.eg"))
+			if (w.getName().matches(".+\\.eg"))
 			{
 				networks.add((SVM)EncogDirectoryPersistence.loadObject(w));
 			}
@@ -38,12 +39,13 @@ public class SPAMMethod implements StegMethod {
 
 	@Override
 	public double testImage(Image image) {
+		loadSVMS();
 		double[][] features = getSPAMFeatures(image);
 		double result = 0;
 		int numData = 0;
 		for (SVM network : networks)
 		{
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < Colour.length(); i++)
 			{
 				numData++;
 				MLData d = new BasicMLData(features[i]);

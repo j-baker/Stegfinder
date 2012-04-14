@@ -30,9 +30,9 @@ public class SPAMTrainSVM {
 	
 	public void trainAndSave()
 	{
-		int numImages = 500;
-		String fileName = "test1";
-		String training = "res/BOWS2/orig/";
+		int numImages = 5000;
+		String fileName = "replace_10";
+		String training = "res/BOWS2/training/";
 		String testing = "res/BOWS2/testing/";
 		MLDataSet trainingSet = getFeatures(training, 0, 0, 0, numImages);
 		MLDataSet testingSet = getFeatures(testing, 1, 0, numImages, numImages);
@@ -66,7 +66,7 @@ public class SPAMTrainSVM {
 				}
 				System.out.println("Epoch: "+epoch+" Best Error: "+bestError+" Current Error: "+e+" Self Error: "+calculateError(trainingSet, network)+ " Best Gamma: "+bestGamma+" Best C: "+bestC);
 				epoch++;
-				EncogDirectoryPersistence.saveObject(new File(fileName+"_"+Double.toString(e).replace(".","")+"_"+epoch+".eg"), network);
+				//EncogDirectoryPersistence.saveObject(new File(fileName+"_"+Double.toString(e).replace(".","")+"_"+epoch+".eg"), network);
 			}
 		}
 		train.setC(bestC);
@@ -109,7 +109,7 @@ public class SPAMTrainSVM {
 			}
 			if (i % 5 == 0)
 			{
-				//System.out.println(i);
+				System.out.println(i);
 			}
 		}
 	

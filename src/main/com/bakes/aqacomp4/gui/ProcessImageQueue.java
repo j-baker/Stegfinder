@@ -2,8 +2,14 @@ package com.bakes.aqacomp4.gui;
 
 import javax.swing.SwingWorker;
 
-import com.bakes.aqacomp4.imagetools.ImageQueueItem;
+import com.bakes.aqacomp4.imagetools.ImageRecord;
 
+/**
+ * Processes the image queue. The processing code is placed in this class
+ * so that the user interface does not lock up during processing.
+ * @author bakes
+ *
+ */
 public class ProcessImageQueue extends SwingWorker<Integer, Integer> {
 	ApplicationWindow application;
 	StegTableModel tableModel;
@@ -14,13 +20,16 @@ public class ProcessImageQueue extends SwingWorker<Integer, Integer> {
 		this.tableModel = window.getTable();
 	}
 	
+	/**
+	 * Process the queue.
+	 */
 	@Override
 	protected Integer doInBackground() throws Exception {
 		application.setProgress(null);
 		application.setStartStopText("Stop");
 		int length = tableModel.getResults().size();
 		int i = 0;
-		for (ImageQueueItem item : tableModel.getResults())
+		for (ImageRecord item : tableModel.getResults())
 		{
 			if (!Thread.currentThread().isInterrupted())
 			{

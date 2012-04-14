@@ -1,0 +1,366 @@
+\begin{texdocpackage}{com.bakes.aqacomp4}
+\label{texdoclet:com.bakes.aqacomp4}
+
+\begin{texdocclass}{enum}{Colour}
+\label{texdoclet:com.bakes.aqacomp4.Colour}
+\begin{texdocclassintro}
+The different colours that are supported. Stegfinder supports only 24-bit
+ bitmap files. In the future, a second `GreyscaleColor' enum could be produced,
+ allowing for black and white images. At present, they are simply converted to
+ 24-bit bitmap files before processing, which makes the computations less efficient
+ for black and white files only.\end{texdocclassintro}
+\begin{texdocenums}
+\texdocenum{BLUE}{}
+\texdocenum{GREEN}{}
+\texdocenum{RED}{}
+\end{texdocenums}
+\begin{texdocclassmethods}
+\texdocmethod{public static}{int}{length}{()}{}{\texdocreturn{The number of colours represented in the image data.}
+}
+\texdocmethod{public static}{Colour}{valueOf}{(String name)}{}{}
+\texdocmethod{public static}{Colour}{values}{()}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\end{texdocpackage}
+
+
+
+\begin{texdocpackage}{com.bakes.aqacomp4.exporter}
+\label{texdoclet:com.bakes.aqacomp4.exporter}
+
+\begin{texdocclass}{class}{CSVExporter}
+\label{texdoclet:com.bakes.aqacomp4.exporter.CSVExporter}
+\begin{texdocclassintro}
+Exports the supplied data as a Comma Separated Values file.
+ Exported are the path to the image file, the method of steganalysis used, and the result.\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{CSVExporter}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{void}{export}{(StegTableModel table, String fileName)}{Exports the provided data to a CSV file. Only images that have been tested are processed.}{\begin{texdocparameters}
+\texdocparameter{table}{The StegTableModel the data is to be taken from.}
+\texdocparameter{fileName}{the path the CSV file is to be written to..}
+\end{texdocparameters}
+}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{Export}
+\label{texdoclet:com.bakes.aqacomp4.exporter.Export}
+\begin{texdocclassintro}
+Exports the table data. Depending on provided options, will export provided data to csv or pdf formats.\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{Export}{(StegTableModel table, String fileName, boolean csv, boolean pdf)}{Initialize a new export object, ready to export to file.}{\begin{texdocparameters}
+\texdocparameter{table}{The table the data is to be taken from.}
+\texdocparameter{fileName}{The base filename. Should be without extension, though extensions should not be filtered.}
+\texdocparameter{csv}{Output CSV file}
+\texdocparameter{pdf}{Output PDF file (Windows only).}
+\end{texdocparameters}
+}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{void}{exportToFiles}{()}{Exports the data using the information given above.}{}
+\texdocmethod{public static}{boolean}{PDFExportAllowed}{()}{To reduce unintentional bugs, this software is bundled with a distribution of $\{$$\backslash$LaTeX$\}$.
+ This distribution supports only Windows. Thus, we can only export as pdf files if
+ the system is running on Windows}{\texdocreturn{true if we are allowed to export as a PDF}
+}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{PDFExporter}
+\label{texdoclet:com.bakes.aqacomp4.exporter.PDFExporter}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{PDFExporter}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{void}{export}{(StegTableModel table, String string)}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\end{texdocpackage}
+
+
+
+\begin{texdocpackage}{com.bakes.aqacomp4.gui}
+\label{texdoclet:com.bakes.aqacomp4.gui}
+
+\begin{texdocclass}{class}{ApplicationWindow}
+\label{texdoclet:com.bakes.aqacomp4.gui.ApplicationWindow}
+\begin{texdocclassintro}
+The main application. Contains the interface between the user and the underlying stegmethods. Provides options for analysis and a queue.\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{ApplicationWindow}{()}{Create and show the application.}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{void}{actionPerformed}{(ActionEvent arg0)}{}{}
+\texdocmethod{public}{Export}{getExporter}{()}{}{}
+\texdocmethod{public}{StegTableModel}{getTable}{()}{}{\texdocreturn{the table model, which can be manipulated.}
+}
+\texdocmethod{public static}{void}{main}{(String args)}{Launch the application.}{}
+\texdocmethod{public}{void}{setProgress}{(int progress)}{Sets the progress bar to an integer value.}{\begin{texdocparameters}
+\texdocparameter{progress}{An int 0 \textless{}= progress \textless{}= 100. Expressed as a percentage.}
+\end{texdocparameters}
+}
+\texdocmethod{public}{void}{setProgress}{(String progress)}{Sets a text message on the progress bar.}{\begin{texdocparameters}
+\texdocparameter{progress}{The message to be shown}
+\end{texdocparameters}
+}
+\texdocmethod{public}{void}{setStartStopText}{(String string)}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{ProcessImageQueue}
+\label{texdoclet:com.bakes.aqacomp4.gui.ProcessImageQueue}
+\begin{texdocclassintro}
+Processes the image queue. The processing code is placed in this class
+ so that the user interface does not lock up during processing.\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{ProcessImageQueue}{(ApplicationWindow window)}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{protected}{Integer}{doInBackground}{()}{Process the queue.}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{StegTableModel}
+\label{texdoclet:com.bakes.aqacomp4.gui.StegTableModel}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{StegTableModel}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{void}{addQueueItem}{(ImageQueueItem i)}{Add an item to the queue.}{\begin{texdocparameters}
+\texdocparameter{i}{The item that is to be added.}
+\end{texdocparameters}
+}
+\texdocmethod{public}{void}{clearQueue}{()}{}{}
+\texdocmethod{public}{int}{getColumnCount}{()}{}{}
+\texdocmethod{public}{String}{getColumnName}{(int col)}{}{}
+\texdocmethod{public}{LinkedList\textless{}ImageQueueItem\textgreater{}}{getResults}{()}{For continuity, should only be used for read-only tasks.}{\texdocreturn{The contents of the queue.}
+}
+\texdocmethod{public}{int}{getRowCount}{()}{Get the number of rows in the table$/$items in the queue.}{}
+\texdocmethod{public}{Object}{getValueAt}{(int rowIndex, int columnIndex)}{}{}
+\texdocmethod{public}{void}{removeQueueItem}{(int i)}{}{}
+\texdocmethod{public}{void}{removeSelected}{(JTable table)}{Remove all items from the table that have been selected in the user interface.}{\begin{texdocparameters}
+\texdocparameter{table}{The table that the items were selected in.}
+\end{texdocparameters}
+}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\end{texdocpackage}
+
+
+
+\begin{texdocpackage}{com.bakes.aqacomp4.imagetools}
+\label{texdoclet:com.bakes.aqacomp4.imagetools}
+
+\begin{texdocclass}{class}{Image}
+\label{texdoclet:com.bakes.aqacomp4.imagetools.Image}
+\begin{texdocclassintro}
+Class for the storage of images while they are being used.
+ 
+ class Image provides basic methods for use with accessing stored bitmap image data.\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{Image}{(String fileName)}{Loads a supported image file (for the purposes of StegFinder, supported image files are 24-bit .bmp and .png files).}{\begin{texdocparameters}
+\texdocparameter{fileName}{The path to the image file. Assumed to be a valid path on the file system, so must be pre-validated.}
+\end{texdocparameters}
+}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{int}{getHeight}{()}{}{\texdocreturn{height of image (in pixels)}
+}
+\texdocmethod{public}{int}{getPixel}{(int yOffset, int xOffset, Colour colour)}{Returns the value of a single pixel in the stored image.}{\begin{texdocparameters}
+\texdocparameter{yOffset}{The y-coordinate of the pixel that is being accessed. 0 is considered to be the top of the image.}
+\texdocparameter{xOffset}{The x-coordinate of the pixel that is being accessed. 0 is considered to be the left of the image.}
+\texdocparameter{colour}{The colour channel that is to be accessed.}
+\end{texdocparameters}
+\texdocreturn{The pixel value.}
+\begin{texdocthrows}
+\texdocthrow{ImageTooSmallException}{}
+\texdocthrow{IllegalArgumentException}{}
+\end{texdocthrows}
+}
+\texdocmethod{public}{int}{getSize}{()}{}{\texdocreturn{number of pixels in image.}
+}
+\texdocmethod{public}{int}{getWidth}{()}{}{\texdocreturn{width of image (in pixels)}
+}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{ImageNotTestedException}
+\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageNotTestedException}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{ImageNotTestedException}{()}{}{}
+\texdocconstructor{public}{ImageNotTestedException}{(String arg0)}{}{\begin{texdocparameters}
+\texdocparameter{arg0}{}
+\end{texdocparameters}
+}
+\texdocconstructor{public}{ImageNotTestedException}{(Throwable arg0)}{}{\begin{texdocparameters}
+\texdocparameter{arg0}{}
+\end{texdocparameters}
+}
+\texdocconstructor{public}{ImageNotTestedException}{(String arg0, Throwable arg1)}{}{\begin{texdocparameters}
+\texdocparameter{arg0}{}
+\texdocparameter{arg1}{}
+\end{texdocparameters}
+}
+\end{texdocclassconstructors}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{ImageQueueItem}
+\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageQueueItem}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{ImageQueueItem}{(String imagePath, StegMethods method)}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{String}{getImagePath}{()}{Get the path of the image this item links to.}{\texdocreturn{The absolute path to the image (on the filesystem)}
+}
+\texdocmethod{public}{double}{getResult}{()}{Get the result in numerical form.}{\texdocreturn{A 3-item double array, all items 0 \textless{}= x \textless{}= 1.}
+\begin{texdocthrows}
+\texdocthrow{ImageNotTestedException}{}
+\end{texdocthrows}
+}
+\texdocmethod{public}{StegMethods}{getStegMethod}{()}{We might want to get the StegMethod that has been used (for example, to print its name). Note, that this is the unique identifier of the StegMethod, and not a link to any Steganalysis object.}{\texdocreturn{The StegMethod specified for use with this image.}
+}
+\texdocmethod{public}{boolean}{runMethod}{()}{Run the steganalysis}{\texdocreturn{true if steganalysis was performed correctly, false otherwise.}
+}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{ImageTooSmallException}
+\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageTooSmallException}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{ImageTooSmallException}{()}{}{}
+\texdocconstructor{public}{ImageTooSmallException}{(String message)}{}{}
+\texdocconstructor{public}{ImageTooSmallException}{(Throwable cause)}{}{}
+\texdocconstructor{public}{ImageTooSmallException}{(String message, Throwable cause)}{}{}
+\end{texdocclassconstructors}
+\end{texdocclass}
+
+
+\end{texdocpackage}
+
+
+
+\begin{texdocpackage}{com.bakes.aqacomp4.stegmethods}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods}
+
+\begin{texdocclass}{class}{ChiSquareMethod}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods.ChiSquareMethod}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{ChiSquareMethod}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{double}{testImage}{(Image image)}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{RSMethod}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods.RSMethod}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{RSMethod}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{double}{testImage}{(Image image)}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{SPAMMethod}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods.SPAMMethod}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{SPAMMethod}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{void}{loadSVMS}{()}{}{}
+\texdocmethod{public}{double}{testImage}{(Image image)}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{class}{SPAMTrainSVM}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods.SPAMTrainSVM}
+\begin{texdocclassintro}
+\end{texdocclassintro}
+\begin{texdocclassconstructors}
+\texdocconstructor{public}{SPAMTrainSVM}{()}{}{}
+\end{texdocclassconstructors}
+\begin{texdocclassmethods}
+\texdocmethod{public}{double}{calculateError}{(MLDataSet testSet, MLRegression network)}{}{}
+\texdocmethod{public}{MLDataSet}{getFeatures}{(String prefix, int offset, int colour, int offset2, int numImages)}{}{}
+\texdocmethod{public static}{void}{main}{(String args)}{}{}
+\texdocmethod{public}{void}{trainAndSave}{()}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{interface}{StegMethod}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods.StegMethod}
+\begin{texdocclassintro}
+StegMethods are used for performing Steganalysis on Images, passed as arguments.
+ Calling the method testImage with an appropriate argument will return a double
+ with a number close to one indicated steganography detected and zero indicating no steganography detected.\end{texdocclassintro}
+\begin{texdocclassmethods}
+\texdocmethod{public}{double}{testImage}{(Image i)}{Runs the steganalytical test on the loaded image.}{\begin{texdocthrows}
+\texdocthrow{ImageTooSmallException}{if the image file is too small to be tested.}
+\end{texdocthrows}
+}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\begin{texdocclass}{enum}{StegMethods}
+\label{texdoclet:com.bakes.aqacomp4.stegmethods.StegMethods}
+\begin{texdocclassintro}
+Dispatcher for the methods of steganography.
+ 
+ Each method of steganography is a generic StegMethod. Whilst this means that software that calls one StegMethod can call all StegMethods, in Java methods cannot be referenced.
+ I thus use a dispatcher. All present methods of steganography are hard-coded into this file. Adding a new method of steganography requires the addition of only two lines.
+ Running the method getMethod() returns the appropriate StegMethod, ready for use.\end{texdocclassintro}
+\begin{texdocenums}
+\texdocenum{CHI\_SQUARE}{}
+\texdocenum{RS}{}
+\texdocenum{SPAM}{}
+\end{texdocenums}
+\begin{texdocclassmethods}
+\texdocmethod{public}{StegMethod}{getMethod}{()}{}{\texdocreturn{The StegMethod linked to the chosen entry in the enum.}
+}
+\texdocmethod{public}{String}{toString}{()}{}{}
+\texdocmethod{public static}{StegMethods}{valueOf}{(String name)}{}{}
+\texdocmethod{public static}{StegMethods}{values}{()}{}{}
+\end{texdocclassmethods}
+\end{texdocclass}
+
+
+\end{texdocpackage}
+
+
+

@@ -1,13 +1,15 @@
-/**
- * 
- */
 package com.bakes.aqacomp4.imagetools;
 
 /**
  * @author bakes
- *
+ * If we attempt to access the result of the steganalysis before the steganalysis has been run, this exception is thrown.
  */
 public class ImageNotTestedException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5655102824543700278L;
 
 	/**
 	 * 

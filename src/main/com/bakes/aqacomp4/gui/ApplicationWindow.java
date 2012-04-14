@@ -23,9 +23,14 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import com.bakes.aqacomp4.exporter.Export;
-import com.bakes.aqacomp4.imagetools.ImageQueueItem;
+import com.bakes.aqacomp4.imagetools.ImageRecord;
 import com.bakes.aqacomp4.stegmethods.StegMethods;
 
+/**
+ * The main application. Contains the interface between the user and the underlying stegmethods. Provides options for analysis and a queue.
+ * @author bakes
+ *
+ */
 public class ApplicationWindow implements ActionListener {
 	private JFrame application;
 	private JTextField sourcePath;
@@ -69,23 +74,35 @@ public class ApplicationWindow implements ActionListener {
 		});
 	}
 	
+	/**
+	 * 
+	 * @return the table model, which can be manipulated.
+	 */
 	public StegTableModel getTable()
 	{
 		return tableModel;
 	}
 	
+	/**
+	 * Sets the progress bar to an integer value. 
+	 * @param progress An int 0 <= progress <= 100. Expressed as a percentage.
+	 */
 	public void setProgress(int progress)
 	{
 		this.progress.setValue(progress);
 	}
 	
+	/**
+	 * Sets a text message on the progress bar.
+	 * @param progress The message to be shown
+	 */
 	public void setProgress(String progress)
 	{
 		this.progress.setString(progress);
 	}
 
 	/**
-	 * Create the application.
+	 * Create and show the application.
 	 */
 	public ApplicationWindow() {
 		initialize();
@@ -111,6 +128,7 @@ public class ApplicationWindow implements ActionListener {
 		
 		// The button that selects different input files.
 		inputSelector = new JButton("Source");
+		inputSelector.setToolTipText("Select a path to be processed");
 		GridBagConstraints inputSelectorConstraints = new GridBagConstraints();
 		inputSelectorConstraints.insets = new Insets(5, 0, 5, 0);
 		inputSelectorConstraints.gridx = 0;
@@ -173,6 +191,7 @@ public class ApplicationWindow implements ActionListener {
 		scrollPane.setViewportView(table);
 		
 		queueRemove = new JButton("Remove from Queue");
+		queueRemove.setToolTipText("Remove the selected items from the queue. Shift+Click to remove all items from the queue");
 		GridBagConstraints queueRemoveConstraints = new GridBagConstraints();
 		queueRemoveConstraints.insets = new Insets(0, 0, 5, 0);
 		queueRemoveConstraints.gridx = 5;
@@ -182,6 +201,7 @@ public class ApplicationWindow implements ActionListener {
 		application.getContentPane().add(queueRemove, queueRemoveConstraints);
 		
 		queueAdd = new JButton("Add to Queue");
+		queueAdd.setToolTipText("Add the selected image to the queue with the selected steganalytical methods.");
 		GridBagConstraints queueAddConstraints = new GridBagConstraints();
 		queueAddConstraints.insets = new Insets(0, 0, 5, 0);
 		queueAddConstraints.gridx = 4;
@@ -193,6 +213,7 @@ public class ApplicationWindow implements ActionListener {
 		gridYOffset++;
 		
 		selectOutput = new JButton("Output");
+		selectOutput.setToolTipText("Select a path to output results to.");
 		GridBagConstraints selectOutputConstraints = new GridBagConstraints();
 		selectOutputConstraints.insets = new Insets(0, 0, 5, 5);
 		selectOutputConstraints.gridx = 0;
@@ -211,6 +232,7 @@ public class ApplicationWindow implements ActionListener {
 		application.getContentPane().add(outputPath, outputPathConstraints);
 		
 		csvExport = new JCheckBox("CSV Report");
+		csvExport.setToolTipText("Select if you would like a report to be produced in the CSV file format.");
 		GridBagConstraints csvReportConstraints = new GridBagConstraints();
 		csvReportConstraints.insets = new Insets(0, 0, 5, 5);
 		csvReportConstraints.gridx = 3;
@@ -218,6 +240,7 @@ public class ApplicationWindow implements ActionListener {
 		application.getContentPane().add(csvExport, csvReportConstraints);
 		
 		pdfExport = new JCheckBox("PDF Report");
+		pdfExport.setToolTipText("Select if you would like a report to be produced in the PDF file format.");
 		GridBagConstraints pdfReportConstraints = new GridBagConstraints();
 		pdfReportConstraints.insets = new Insets(0, 0, 5, 5);
 		pdfReportConstraints.gridx = 4;
@@ -229,6 +252,7 @@ public class ApplicationWindow implements ActionListener {
 		application.getContentPane().add(pdfExport, pdfReportConstraints);
 		
 		startStop = new JButton("Start");
+		startStop.setToolTipText("Start or stop processing of the queue.");
 		GridBagConstraints startStopConstraints = new GridBagConstraints();
 		startStopConstraints.insets = new Insets(0, 0, 5, 5);
 		startStopConstraints.gridx = 5;
@@ -274,7 +298,7 @@ public class ApplicationWindow implements ActionListener {
 		else if (source == selectOutput)
 		{
 			JFileChooser chooser = new JFileChooser();
-			chooser.setDialogTitle("Choose a prefix");
+			chooser.setDialogTitle("Choose a filename to save to");
 			if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
 				File file = chooser.getSelectedFile();
 				outputPath.setText(file.getAbsolutePath());
@@ -294,7 +318,7 @@ public class ApplicationWindow implements ActionListener {
 					{
 						if (stegMethods.get(s).isSelected())
 						{
-							ImageQueueItem item = new ImageQueueItem(paths[i], s);
+							ImageRecord item = new ImageRecord(paths[i], s);
 							tableModel.addQueueItem(item);
 							changed = true;
 						}
@@ -307,7 +331,7 @@ public class ApplicationWindow implements ActionListener {
 				{
 					if (stegMethods.get(s).isSelected())
 					{
-						ImageQueueItem i = new ImageQueueItem(path, s);
+						ImageRecord i = new ImageRecord(path, s);
 						tableModel.addQueueItem(i);
 						changed = true;
 					}
@@ -322,6 +346,10 @@ public class ApplicationWindow implements ActionListener {
 				progress.setValue(0);
 				sourcePath.setText("");
 			}	
+			else
+			{
+				JOptionPane.showMessageDialog(application, "You must select at least one method of steganalysis.");
+			}
 
 		}
 		else if (source == queueRemove)
@@ -329,7 +357,11 @@ public class ApplicationWindow implements ActionListener {
 			int mod = arg0.getModifiers();
 
 	        if ((mod & ActionEvent.SHIFT_MASK) > 0) {
-		        tableModel.clearQueue();
+	        	if (JOptionPane.showConfirmDialog(null, "Are you sure you want to empty the queue?", "Confirm",
+                                      JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+	        	{
+	        		tableModel.clearQueue();
+	        	}
 	        }
 	        else
 	        {

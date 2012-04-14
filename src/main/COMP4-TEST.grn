@@ -120,23 +120,9 @@
       <y="169"/>
    </type>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.gui{ProcessImageQueue.java[ProcessImageQueue"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.gui{ApplicationWindow.java[ApplicationWindow"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
       <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{RSMethod.java[RSMethod"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{Image.java[Image"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageTooSmallException.java[ImageTooSmallException"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -149,35 +135,77 @@
    </relationship>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageQueueItem.java[ImageQueueItem"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageNotTestedException.java[ImageNotTestedException"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.gui{ApplicationWindow.java[ApplicationWindow"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.gui{ProcessImageQueue.java[ProcessImageQueue"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
       <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{RSMethod.java[RSMethod"/>
       <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageTooSmallException.java[ImageTooSmallException"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMTrainSVM.java[SPAMTrainSVM"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{Image.java[Image"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageQueueItem.java[ImageQueueItem"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{Image.java[Image"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageTooSmallException.java[ImageTooSmallException"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
       <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{RSMethod.java[RSMethod"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethod.java[StegMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMTrainSVM.java[SPAMTrainSVM"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageQueueItem.java[ImageQueueItem"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{RSMethod.java[RSMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.gui{ProcessImageQueue.java[ProcessImageQueue"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.gui{ApplicationWindow.java[ApplicationWindow"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethod.java[StegMethod"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{ChiSquareMethod.java[ChiSquareMethod"/>
       <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethod.java[StegMethod"/>
       <bendpoints>
       </bendpoints>
@@ -191,57 +219,22 @@
    </relationship>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageTooSmallException.java[ImageTooSmallException"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageQueueItem.java[ImageQueueItem"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMTrainSVM.java[SPAMTrainSVM"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageQueueItem.java[ImageQueueItem"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{Image.java[Image"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{ChiSquareMethod.java[ChiSquareMethod"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethod.java[StegMethod"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMMethod.java[SPAMMethod"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethod.java[StegMethod"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{SPAMTrainSVM.java[SPAMTrainSVM"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{Image.java[Image"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{ChiSquareMethod.java[ChiSquareMethod"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{StegMethods.java[StegMethods"/>
-      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.stegmethods{ChiSquareMethod.java[ChiSquareMethod"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{Image.java[Image"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageTooSmallException.java[ImageTooSmallException"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageQueueItem.java[ImageQueueItem"/>
+      <targetType="=COMP4-TEST/src\/main<com.bakes.aqacomp4.imagetools{ImageNotTestedException.java[ImageNotTestedException"/>
       <bendpoints>
       </bendpoints>
    </relationship>

@@ -62,7 +62,7 @@ public class Image {
 	 * @param yOffset The y-coordinate of the pixel that is being accessed. 0 is considered to be the top of the image.
 	 * @param xOffset The x-coordinate of the pixel that is being accessed. 0 is considered to be the left of the image.
 	 * @param colour The colour channel that is to be accessed.
-	 * @return
+	 * @return The pixel value.
 	 * @throws ImageTooSmallException
 	 * @throws IllegalArgumentException
 	 */
