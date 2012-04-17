@@ -22,7 +22,7 @@ import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
  *
  */
 public class SPAMMethod implements StegMethod {
-	LinkedList<SVM> networks =  new LinkedList<SVM>();
+	static LinkedList<SVM> networks =  new LinkedList<SVM>();
 	
 	public void loadSVMS()
 	{
@@ -39,7 +39,10 @@ public class SPAMMethod implements StegMethod {
 
 	@Override
 	public double testImage(Image image) {
-		loadSVMS();
+		if (networks.size() == 0)
+		{
+			loadSVMS();
+		}
 		double[][] features = getSPAMFeatures(image);
 		double result = 0;
 		int numData = 0;

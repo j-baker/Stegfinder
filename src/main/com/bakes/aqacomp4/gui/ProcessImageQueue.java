@@ -42,7 +42,7 @@ public class ProcessImageQueue extends SwingWorker<Integer, Integer> {
 			}
 		}
 		application.setProgress("Exporting Results");
-		application.getExporter().exportToFiles();
+		application.getExporter().exportToFiles(tableModel.getResults());
 		application.setProgress("Done");
 		application.setStartStopText("Start");
 

@@ -1,6 +1,9 @@
 package com.bakes.aqacomp4.exporter;
 
+import java.util.LinkedList;
+
 import com.bakes.aqacomp4.gui.StegTableModel;
+import com.bakes.aqacomp4.imagetools.ImageRecord;
 
 /**
  * Exports the table data. Depending on provided options, will export provided data to csv or pdf formats.
@@ -9,7 +12,6 @@ import com.bakes.aqacomp4.gui.StegTableModel;
  */
 
 public class Export {
-	private StegTableModel table;
 	private String fileName;
 	private boolean csv;
 	private boolean pdf;
@@ -21,9 +23,8 @@ public class Export {
 	 * @param csv Output CSV file
 	 * @param pdf Output PDF file (Windows only).
 	 */
-	public Export(StegTableModel table, String fileName, boolean csv, boolean pdf)
+	public Export(String fileName, boolean csv, boolean pdf)
 	{
-		this.table = table;
 		this.fileName = fileName;
 		this.csv = csv;
 		this.pdf = pdf;
@@ -32,19 +33,19 @@ public class Export {
 	/**
 	 * Exports the data using the information given above.
 	 */
-	public void exportToFiles()
+	public void exportToFiles(LinkedList<ImageRecord> tableData)
 	{
 		if (csv)
 		{
 			CSVExporter c = new CSVExporter();
-			c.export(table, fileName+".csv");
+			c.export(tableData, fileName+".csv");
 		}
 		if (pdf)
 		{
 			if (PDFExportAllowed())
 			{
 				PDFExporter p = new PDFExporter();
-				p.export(table, fileName+".pdf");
+				p.export(tableData, fileName+".pdf");
 			}
 		}
 	}

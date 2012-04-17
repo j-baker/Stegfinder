@@ -1,5 +1,6 @@
 package com.bakes.aqacomp4.gui;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -129,6 +130,7 @@ public class ApplicationWindow implements ActionListener {
 		// The button that selects different input files.
 		inputSelector = new JButton("Source");
 		inputSelector.setToolTipText("Select a path to be processed");
+		inputSelector.setPreferredSize(new Dimension(100, 100)); // Somehow needed for good Windows support.
 		GridBagConstraints inputSelectorConstraints = new GridBagConstraints();
 		inputSelectorConstraints.insets = new Insets(5, 0, 5, 0);
 		inputSelectorConstraints.gridx = 0;
@@ -312,17 +314,26 @@ public class ApplicationWindow implements ActionListener {
 			if (file.isDirectory())
 			{
 				String[] paths = getImagesFromFolder(file);
-				for (int i = 0; i < paths.length; i++)
+				if (paths != null)
 				{
-					for (StegMethods s : StegMethods.values())
+					System.out.println(paths.length);
+					for (int i = 0; i < paths.length; i++)
 					{
-						if (stegMethods.get(s).isSelected())
+						for (StegMethods s : StegMethods.values())
 						{
-							ImageRecord item = new ImageRecord(paths[i], s);
-							tableModel.addQueueItem(item);
-							changed = true;
-						}
+							if (stegMethods.get(s).isSelected())
+							{
+								ImageRecord item = new ImageRecord(paths[i], s);
+								tableModel.addQueueItem(item);
+								changed = true;
+							}
+						}				
 					}				
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(application, "The path you have provided contains no supported files.");
+					changed = true;
 				}
 			}
 			else if (file.exists() && (path.endsWith(".bmp") || path.endsWith(".png")))
@@ -377,7 +388,7 @@ public class ApplicationWindow implements ActionListener {
 			}
 			else
 			{
-				exporter = new Export(tableModel, outputPath.getText(), csvExport.isSelected(), pdfExport.isSelected());
+				exporter = new Export(outputPath.getText(), csvExport.isSelected(), pdfExport.isSelected());
 				processor = new ProcessImageQueue(this);
 				processor.execute();
 				isRunning = true;
@@ -397,6 +408,10 @@ public class ApplicationWindow implements ActionListener {
 	private String[] getImagesFromFolder(File file) {
 		LinkedList<String> images = new LinkedList<String>();
 		getImagesFromFolder(file, images);
+		if (images.size() == 0)
+		{
+			return null;
+		}
 		return images.toArray(new String[1]);
 	}
 	
@@ -412,18 +427,20 @@ public class ApplicationWindow implements ActionListener {
 			else
 			{
 				String filePath = files[i].getAbsolutePath();
-				if (filePath.endsWith(".bmp") || filePath.endsWith(".png"))
+				if (filePath.endsWith(BITMAP) || filePath.endsWith(PNG))
 				{
 					images.add(filePath);
 				}
 			}
 		}
 	}
-
+	
+	static final String BITMAP = ".bmp";
+	static final String PNG = ".png";
 	class ImageFileFilter extends javax.swing.filechooser.FileFilter {
 		@Override
 	    public boolean accept(File f) {
-	        return (f.isDirectory() || f.getName().toLowerCase().endsWith(".bmp") || f.getName().toLowerCase().endsWith(".png")) /*&& !f.getName().toLowerCase().endsWith(".app"))*/; // TODO Constants, let it do it.
+	        return (f.isDirectory() || f.getName().toLowerCase().endsWith(BITMAP) || f.getName().toLowerCase().endsWith(PNG));
 	    }
 	    
 	    @Override

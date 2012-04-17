@@ -24,9 +24,8 @@ public class CSVExporter {
 	 * @param table The StegTableModel the data is to be taken from.
 	 * @param fileName the path the CSV file is to be written to..
 	 */
-	public void export(StegTableModel table, String fileName) {
+	public void export(LinkedList<ImageRecord> image, String fileName) {
 		String exportData = "";
-		LinkedList<ImageRecord> image = table.getResults();
 		for (ImageRecord i : image)
 		{
 			try {
