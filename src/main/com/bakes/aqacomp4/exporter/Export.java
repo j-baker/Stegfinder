@@ -42,16 +42,13 @@ public class Export {
 		}
 		if (pdf)
 		{
-			if (PDFExportAllowed())
-			{
-				PDFExporter p = new PDFExporter();
-				p.export(tableData, fileName+".pdf");
-			}
+			PDFExporter p = new PDFExporter();
+			p.export(tableData, fileName+".pdf");
 		}
 	}
 	
 	/**
-	 * To reduce unintentional bugs, this software is bundled with a distribution of {\LaTeX}.
+	 * To reduce unintentional bugs, this software is bundled with a distribution of LaTeX.
 	 * This distribution supports only Windows. Thus, we can only export as pdf files if
 	 * the system is running on Windows
 	 * @return true if we are allowed to export as a PDF

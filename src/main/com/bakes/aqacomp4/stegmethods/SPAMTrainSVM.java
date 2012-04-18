@@ -31,7 +31,7 @@ public class SPAMTrainSVM {
 	public void trainAndSave()
 	{
 		int numImages = 5000;
-		String fileName = "replace_10";
+		String fileName = "replace_5";
 		String training = "res/BOWS2/training/";
 		String testing = "res/BOWS2/testing/";
 		MLDataSet trainingSet = getFeatures(training, 0, 0, 0, numImages);
