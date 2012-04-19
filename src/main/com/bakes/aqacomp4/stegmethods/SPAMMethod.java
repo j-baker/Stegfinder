@@ -4,7 +4,6 @@
 package com.bakes.aqacomp4.stegmethods;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.encog.ml.data.MLData;

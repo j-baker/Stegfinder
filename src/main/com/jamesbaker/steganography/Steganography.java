@@ -185,6 +185,7 @@ public class Steganography {
 	 * @param seed
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private byte[] decodeByteArray(int seed) {
 		randomOffsets = new Random(seed);
 		int fileSize = getHiddenDataLength();
@@ -213,6 +214,7 @@ public class Steganography {
 	 * Decodes the embedded image data into a human-readable format.
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private String decodeImage(int seed) {
 		randomOffsets = new Random(seed);
 		String s = "";
@@ -245,6 +247,7 @@ public class Steganography {
 	 */
 	public void logPercentage(int done, int length)
 	{
+			@SuppressWarnings("unused")
 			double j = ((double) done/(double) length)*100;
 			//console.println(j+"%");
 	}

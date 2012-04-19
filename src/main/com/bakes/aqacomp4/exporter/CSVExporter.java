@@ -1,9 +1,12 @@
 package com.bakes.aqacomp4.exporter;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import com.aqa.AQAWriteTextFile;
-import com.bakes.aqacomp4.gui.StegTableModel;
 import com.bakes.aqacomp4.imagetools.ImageNotTestedException;
 import com.bakes.aqacomp4.imagetools.ImageRecord;
 
@@ -34,13 +37,20 @@ public class CSVExporter {
 			} catch (ImageNotTestedException e) {
 			}
 		}
-		writeFile(fileName, exportData);
+		stringToFile(exportData, fileName);
 	}
-
-	private void writeFile(String fileName, String exportData) {
-		AQAWriteTextFile writer = new AQAWriteTextFile(fileName);
-		writer.writeToTextFile(exportData);
-		writer.closeFile();		
+	
+	private void stringToFile(String s, String path)
+	{
+		try {
+			PrintWriter out = new PrintWriter(path, "UTF-8");
+			out.print(s);
+			out.close();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "The output path provided is not valid.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

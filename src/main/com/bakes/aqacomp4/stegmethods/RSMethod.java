@@ -102,7 +102,28 @@ public class RSMethod implements StegMethod {
 			resultCount++;
 			result += z/(z-0.5);
 		}
-		return result/resultCount;
+		double mean = result / resultCount;
+		
+		if (mean > 0.1)
+		{
+			return 1;
+		}
+		else if (mean > 0.05)
+		{
+			return 0.5;
+		}
+		else if (mean < -0.05)
+		{
+			return 0.5;
+		}
+		else if (mean < -0.1)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
 	private int calculateNoise(int[] x)

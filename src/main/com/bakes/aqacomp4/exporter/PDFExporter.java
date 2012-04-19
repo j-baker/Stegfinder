@@ -2,7 +2,6 @@ package com.bakes.aqacomp4.exporter;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -12,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 
-import com.aqa.AQAWriteTextFile;
 import com.bakes.aqacomp4.imagetools.ImageNotTestedException;
 import com.bakes.aqacomp4.imagetools.ImageRecord;
 
@@ -131,7 +129,7 @@ public class PDFExporter {
 			e.printStackTrace();
 		}
 		
-		//deleteTempDirectory();
+		deleteTempDirectory();
 		
 		
 	}
@@ -143,6 +141,7 @@ public class PDFExporter {
 			out.print(s);
 			out.close();
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "The output path provided is not valid.");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

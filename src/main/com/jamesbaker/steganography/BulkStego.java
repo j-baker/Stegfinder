@@ -7,13 +7,14 @@ public class BulkStego {
 	 */
 	public static void main(String[] args) {
 		BulkStego b = new BulkStego();
-		b.run("res/bows2/training/", 0, 0.2);
-		b.run("res/bows2/testing/", 1, 0.2);
+		b.run("res/bows2/training/", 0, 0.1);
+		b.run("res/bows2/testing/", 1, 0.1);
 		//b.runNew();
 		// TODO Auto-generated method stub
 
 	}
 	
+	@SuppressWarnings("unused")
 	private void runNew() {
 		String prefix = "res/bows2/testing";
 		String suffix = ".bmp";
