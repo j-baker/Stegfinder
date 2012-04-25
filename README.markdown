@@ -1,4 +1,4 @@
-nder is a utility to aid detection of steganography inside bitmap (.bmp, .png) image files.
+Stegfinder is a utility to aid detection of steganography inside bitmap (.bmp, .png) image files.
 
 This project should be considered the COMP4 coursework of James Baker (62323, 1006).
 
