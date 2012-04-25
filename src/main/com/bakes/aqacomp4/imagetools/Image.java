@@ -68,17 +68,17 @@ public class Image {
 	 */
 	public int getPixel(int yOffset, int xOffset, Colour colour) throws ImageTooSmallException, IllegalArgumentException
 	{
-		// TODO Throw Exception if image too small.
+		// Throw Exception if image too small.
 		if (yOffset >= height || xOffset >= width)
 		{
 			throw new ImageTooSmallException();
 		}
-		// TODO Throw exception if index is less than zero.
+		// Throw exception if index is less than zero.
 		else if (yOffset < 0 || xOffset < 0)
 		{
 			throw new IllegalArgumentException();
 		}
-		// TODO Remove the image's sign. Byte is a signed datatype in java.
+		// Remove the pixel's sign. Byte is a signed datatype in java.
 		return 0xFF & imageData[yOffset][xOffset][colour.ordinal()];
 	}
 	

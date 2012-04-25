@@ -14,6 +14,9 @@ public class StegTableModel extends AbstractTableModel {
 	private String[] columns = {"Filename", "Steganalysis Method", "Result"};
 	private LinkedList<ImageRecord> items = new LinkedList<ImageRecord>();
 	
+	/**
+	 * Get the number of columns in the table.
+	 */
 	@Override
 	public int getColumnCount() {
 		return columns.length;
@@ -28,6 +31,9 @@ public class StegTableModel extends AbstractTableModel {
 		return items;
 	}
 	
+	/**
+	 * Get the name of a column.
+	 */
 	@Override
 	public String getColumnName(int col) {
 		  return columns[col];
@@ -38,7 +44,6 @@ public class StegTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
 		return items.size();
 	}
 	
@@ -51,17 +56,27 @@ public class StegTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 	
+	/**
+	 * Remove all items from the queue.
+	 */
 	public void clearQueue()
 	{
 		items.clear();
 		fireTableDataChanged();
 	}
 	
+	/**
+	 * Remove a single item from the queue.
+	 * @param i The index of the item that should be removed.
+	 */
 	public void removeQueueItem(int i)
 	{
 		items.remove(i);
 	}
 
+	/**
+	 * Get the contents of the selected cell.
+	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		ImageRecord item = items.get(rowIndex);

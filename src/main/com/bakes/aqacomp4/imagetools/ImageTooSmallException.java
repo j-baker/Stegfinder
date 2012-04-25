@@ -9,23 +9,19 @@ package com.bakes.aqacomp4.imagetools;
 public class ImageTooSmallException extends Exception {
 
 	public ImageTooSmallException() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public ImageTooSmallException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	public ImageTooSmallException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 
 
 	public ImageTooSmallException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 }

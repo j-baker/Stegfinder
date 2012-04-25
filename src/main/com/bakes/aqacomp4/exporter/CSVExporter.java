@@ -48,7 +48,6 @@ public class CSVExporter {
 			out.close();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "The output path provided is not valid.");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

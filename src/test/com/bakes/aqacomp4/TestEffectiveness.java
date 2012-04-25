@@ -24,28 +24,28 @@ public class TestEffectiveness {
 	public void test() {
 		double target = 0.9;
 		int offset = 5000;
-		int numImages = 5000;
+		int numImages = 500;
 		String path = "res/BOWS2/training/";
 		int correct = 0;
 		for (int i = 0; i < numImages; i++)
 		{
-			System.out.println(i);
+			System.out.println(i+ " " +  (correct/(i+0.0))*100+ " %");
 			ImageRecord SPAM = new ImageRecord(path+(i+offset)+".bmp", StegMethods.SPAM);
 			ImageRecord RS = new ImageRecord(path+(i+offset)+".bmp", StegMethods.RS);
 			SPAM.runMethod();
 			RS.runMethod();
 			try {
-				double score = (SPAM.getResult()+RS.getResult())/2;
+				double score = ((6*SPAM.getResult())+RS.getResult())/7;
 				if (i % 2 == 0)
 				{
-					if (score > 0.5)
+					if (score > 1.0/7)
 					{
 						correct++;
 					}
 				}
 				else
 				{
-					if (score <= 0.5)
+					if (score <= 1.0/7)
 					{
 						correct++;
 					}

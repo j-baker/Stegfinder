@@ -39,7 +39,7 @@ Exports the supplied data as a Comma Separated Values file.
 \texdocconstructor{public}{CSVExporter}{()}{}{}
 \end{texdocclassconstructors}
 \begin{texdocclassmethods}
-\texdocmethod{public}{void}{export}{(StegTableModel table, String fileName)}{Exports the provided data to a CSV file. Only images that have been tested are processed.}{\begin{texdocparameters}
+\texdocmethod{public}{void}{export}{(LinkedList\textless{}ImageRecord\textgreater{} image, String fileName)}{Exports the provided data to a CSV file. Only images that have been tested are processed.}{\begin{texdocparameters}
 \texdocparameter{table}{The StegTableModel the data is to be taken from.}
 \texdocparameter{fileName}{the path the CSV file is to be written to..}
 \end{texdocparameters}
@@ -53,7 +53,7 @@ Exports the supplied data as a Comma Separated Values file.
 \begin{texdocclassintro}
 Exports the table data. Depending on provided options, will export provided data to csv or pdf formats.\end{texdocclassintro}
 \begin{texdocclassconstructors}
-\texdocconstructor{public}{Export}{(StegTableModel table, String fileName, boolean csv, boolean pdf)}{Initialize a new export object, ready to export to file.}{\begin{texdocparameters}
+\texdocconstructor{public}{Export}{(String fileName, boolean csv, boolean pdf)}{Initialize a new export object, ready to export to file.}{\begin{texdocparameters}
 \texdocparameter{table}{The table the data is to be taken from.}
 \texdocparameter{fileName}{The base filename. Should be without extension, though extensions should not be filtered.}
 \texdocparameter{csv}{Output CSV file}
@@ -62,8 +62,8 @@ Exports the table data. Depending on provided options, will export provided data
 }
 \end{texdocclassconstructors}
 \begin{texdocclassmethods}
-\texdocmethod{public}{void}{exportToFiles}{()}{Exports the data using the information given above.}{}
-\texdocmethod{public static}{boolean}{PDFExportAllowed}{()}{To reduce unintentional bugs, this software is bundled with a distribution of $\{$$\backslash$LaTeX$\}$.
+\texdocmethod{public}{void}{exportToFiles}{(LinkedList\textless{}ImageRecord\textgreater{} tableData)}{Exports the data using the information given above.}{}
+\texdocmethod{public static}{boolean}{PDFExportAllowed}{()}{To reduce unintentional bugs, this software is bundled with a distribution of LaTeX.
  This distribution supports only Windows. Thus, we can only export as pdf files if
  the system is running on Windows}{\texdocreturn{true if we are allowed to export as a PDF}
 }
@@ -74,12 +74,17 @@ Exports the table data. Depending on provided options, will export provided data
 \begin{texdocclass}{class}{PDFExporter}
 \label{texdoclet:com.bakes.aqacomp4.exporter.PDFExporter}
 \begin{texdocclassintro}
+PDF Exporter takes the linked list of results, as well as a filename, and outputs the results to a pretty PDF report, using LaTeX. This functionality is only used when StegFinder is run on Microsoft Windows.
 \end{texdocclassintro}
 \begin{texdocclassconstructors}
 \texdocconstructor{public}{PDFExporter}{()}{}{}
 \end{texdocclassconstructors}
 \begin{texdocclassmethods}
-\texdocmethod{public}{void}{export}{(StegTableModel table, String string)}{}{}
+\texdocmethod{public}{void}{export}{(LinkedList\textless{}ImageRecord\textgreater{} table, String outputPath)}{Exports the provided data to a PDF file. Only images that have been tested are processed.}{\begin{texdocparameters}
+\texdocparameter{table}{}
+\texdocparameter{outputPath}{}
+\end{texdocparameters}
+}
 \end{texdocclassmethods}
 \end{texdocclass}
 
@@ -100,7 +105,8 @@ The main application. Contains the interface between the user and the underlying
 \end{texdocclassconstructors}
 \begin{texdocclassmethods}
 \texdocmethod{public}{void}{actionPerformed}{(ActionEvent arg0)}{}{}
-\texdocmethod{public}{Export}{getExporter}{()}{}{}
+\texdocmethod{public}{Export}{getExporter}{()}{}{\texdocreturn{The exporter that can be used to create results reports.}
+}
 \texdocmethod{public}{StegTableModel}{getTable}{()}{}{\texdocreturn{the table model, which can be manipulated.}
 }
 \texdocmethod{public static}{void}{main}{(String args)}{Launch the application.}{}
@@ -112,7 +118,10 @@ The main application. Contains the interface between the user and the underlying
 \texdocparameter{progress}{The message to be shown}
 \end{texdocparameters}
 }
-\texdocmethod{public}{void}{setStartStopText}{(String string)}{}{}
+\texdocmethod{public}{void}{setStartStopText}{(String string)}{Change the text on the start stop button.}{\begin{texdocparameters}
+\texdocparameter{string}{The desired result text.}
+\end{texdocparameters}
+}
 \end{texdocclassmethods}
 \end{texdocclass}
 
@@ -139,18 +148,21 @@ Processes the image queue. The processing code is placed in this class
 \texdocconstructor{public}{StegTableModel}{()}{}{}
 \end{texdocclassconstructors}
 \begin{texdocclassmethods}
-\texdocmethod{public}{void}{addQueueItem}{(ImageQueueItem i)}{Add an item to the queue.}{\begin{texdocparameters}
+\texdocmethod{public}{void}{addQueueItem}{(ImageRecord i)}{Add an item to the queue.}{\begin{texdocparameters}
 \texdocparameter{i}{The item that is to be added.}
 \end{texdocparameters}
 }
-\texdocmethod{public}{void}{clearQueue}{()}{}{}
-\texdocmethod{public}{int}{getColumnCount}{()}{}{}
-\texdocmethod{public}{String}{getColumnName}{(int col)}{}{}
-\texdocmethod{public}{LinkedList\textless{}ImageQueueItem\textgreater{}}{getResults}{()}{For continuity, should only be used for read-only tasks.}{\texdocreturn{The contents of the queue.}
+\texdocmethod{public}{void}{clearQueue}{()}{Remove all items from the queue.}{}
+\texdocmethod{public}{int}{getColumnCount}{()}{Get the number of columns in the table.}{}
+\texdocmethod{public}{String}{getColumnName}{(int col)}{Get the name of a column.}{}
+\texdocmethod{public}{LinkedList\textless{}ImageRecord\textgreater{}}{getResults}{()}{For continuity, should only be used for read-only tasks.}{\texdocreturn{The contents of the queue.}
 }
 \texdocmethod{public}{int}{getRowCount}{()}{Get the number of rows in the table$/$items in the queue.}{}
-\texdocmethod{public}{Object}{getValueAt}{(int rowIndex, int columnIndex)}{}{}
-\texdocmethod{public}{void}{removeQueueItem}{(int i)}{}{}
+\texdocmethod{public}{Object}{getValueAt}{(int rowIndex, int columnIndex)}{Get the contents of the selected cell.}{}
+\texdocmethod{public}{void}{removeQueueItem}{(int i)}{Remove a single item from the queue.}{\begin{texdocparameters}
+\texdocparameter{i}{The index of the item that should be removed.}
+\end{texdocparameters}
+}
 \texdocmethod{public}{void}{removeSelected}{(JTable table)}{Remove all items from the table that have been selected in the user interface.}{\begin{texdocparameters}
 \texdocparameter{table}{The table that the items were selected in.}
 \end{texdocparameters}
@@ -200,35 +212,12 @@ Class for the storage of images while they are being used.
 \end{texdocclass}
 
 
-\begin{texdocclass}{class}{ImageNotTestedException}
-\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageNotTestedException}
+\begin{texdocclass}{class}{ImageRecord}
+\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageRecord}
 \begin{texdocclassintro}
 \end{texdocclassintro}
 \begin{texdocclassconstructors}
-\texdocconstructor{public}{ImageNotTestedException}{()}{}{}
-\texdocconstructor{public}{ImageNotTestedException}{(String arg0)}{}{\begin{texdocparameters}
-\texdocparameter{arg0}{}
-\end{texdocparameters}
-}
-\texdocconstructor{public}{ImageNotTestedException}{(Throwable arg0)}{}{\begin{texdocparameters}
-\texdocparameter{arg0}{}
-\end{texdocparameters}
-}
-\texdocconstructor{public}{ImageNotTestedException}{(String arg0, Throwable arg1)}{}{\begin{texdocparameters}
-\texdocparameter{arg0}{}
-\texdocparameter{arg1}{}
-\end{texdocparameters}
-}
-\end{texdocclassconstructors}
-\end{texdocclass}
-
-
-\begin{texdocclass}{class}{ImageQueueItem}
-\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageQueueItem}
-\begin{texdocclassintro}
-\end{texdocclassintro}
-\begin{texdocclassconstructors}
-\texdocconstructor{public}{ImageQueueItem}{(String imagePath, StegMethods method)}{}{}
+\texdocconstructor{public}{ImageRecord}{(String imagePath, StegMethods method)}{}{}
 \end{texdocclassconstructors}
 \begin{texdocclassmethods}
 \texdocmethod{public}{String}{getImagePath}{()}{Get the path of the image this item links to.}{\texdocreturn{The absolute path to the image (on the filesystem)}
@@ -243,19 +232,6 @@ Class for the storage of images while they are being used.
 \texdocmethod{public}{boolean}{runMethod}{()}{Run the steganalysis}{\texdocreturn{true if steganalysis was performed correctly, false otherwise.}
 }
 \end{texdocclassmethods}
-\end{texdocclass}
-
-
-\begin{texdocclass}{class}{ImageTooSmallException}
-\label{texdoclet:com.bakes.aqacomp4.imagetools.ImageTooSmallException}
-\begin{texdocclassintro}
-\end{texdocclassintro}
-\begin{texdocclassconstructors}
-\texdocconstructor{public}{ImageTooSmallException}{()}{}{}
-\texdocconstructor{public}{ImageTooSmallException}{(String message)}{}{}
-\texdocconstructor{public}{ImageTooSmallException}{(Throwable cause)}{}{}
-\texdocconstructor{public}{ImageTooSmallException}{(String message, Throwable cause)}{}{}
-\end{texdocclassconstructors}
 \end{texdocclass}
 
 
@@ -302,22 +278,6 @@ Class for the storage of images while they are being used.
 \begin{texdocclassmethods}
 \texdocmethod{public}{void}{loadSVMS}{()}{}{}
 \texdocmethod{public}{double}{testImage}{(Image image)}{}{}
-\end{texdocclassmethods}
-\end{texdocclass}
-
-
-\begin{texdocclass}{class}{SPAMTrainSVM}
-\label{texdoclet:com.bakes.aqacomp4.stegmethods.SPAMTrainSVM}
-\begin{texdocclassintro}
-\end{texdocclassintro}
-\begin{texdocclassconstructors}
-\texdocconstructor{public}{SPAMTrainSVM}{()}{}{}
-\end{texdocclassconstructors}
-\begin{texdocclassmethods}
-\texdocmethod{public}{double}{calculateError}{(MLDataSet testSet, MLRegression network)}{}{}
-\texdocmethod{public}{MLDataSet}{getFeatures}{(String prefix, int offset, int colour, int offset2, int numImages)}{}{}
-\texdocmethod{public static}{void}{main}{(String args)}{}{}
-\texdocmethod{public}{void}{trainAndSave}{()}{}{}
 \end{texdocclassmethods}
 \end{texdocclass}
 

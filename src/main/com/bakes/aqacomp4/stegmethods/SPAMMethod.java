@@ -44,19 +44,21 @@ public class SPAMMethod implements StegMethod {
 		}
 		double[][] features = getSPAMFeatures(image);
 		double result = 0;
-		int numData = 0;
 		for (SVM network : networks)
 		{
+			double tempResult = 0;
 			for (int i = 0; i < Colour.length(); i++)
 			{
-				numData++;
 				MLData d = new BasicMLData(features[i]);
 				d = network.compute(d);
-				result += d.getData(0);
-			}			
+				tempResult += d.getData(0);
+			}		
+			if (tempResult/Colour.length() > result)
+			{
+				result = tempResult/Colour.length();
+			}
 		}
-		// TODO Why mean?
-		return result/numData;
+		return result;
 	}
 
 	// The maximum difference that is to be measured during processing. Larger number means much larger processing time.
@@ -175,7 +177,6 @@ public class SPAMMethod implements StegMethod {
 		{
 			return 7;
 		}
-		// TODO throw exception.
 		return -1;
 	}
 	

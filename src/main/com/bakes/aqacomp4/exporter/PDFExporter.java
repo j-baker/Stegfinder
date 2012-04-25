@@ -1,5 +1,9 @@
 package com.bakes.aqacomp4.exporter;
-
+/**
+ * PDF Exporter takes the linked list of results, as well as a filename,
+ * and outputs the results to a pretty PDF report, using LaTeX. This
+ * functionality is only used when StegFinder is run on Microsoft Windows.
+ */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +23,12 @@ public class PDFExporter {
 	static final String LATEXBIN = "latex\\miktex\\bin";
 
 	static final String NEWLINE = System.getProperty("line.separator");
+	
+	/**
+	 * Exports the provided data to a PDF file. Only images that have been tested are processed.
+	 * @param table
+	 * @param outputPath
+	 */
 	public void export(LinkedList<ImageRecord> table, String outputPath) {
 		LinkedList<String> fileNames = new LinkedList<String>();
 		LinkedList<ImageRecord> stego = new LinkedList<ImageRecord>();
@@ -107,9 +117,9 @@ public class PDFExporter {
 			s += NEWLINE + "\\subsection{SPAM}";
 			s += NEWLINE + "Images are made up of pixels, arranged in a grid. Now, it is entirely reasonable that we might expect white pixels to be located near pixels that are a light grey colour. SPAM steganalysis works by assuming that this is the case across all images. The process of steganography will often change these statistics (meaning that white pixels might be more or less likely to be located near pixels that are a light grey colour), which SPAM uses to differentiate between images that have embedded steganography and images that do not.";
 			s += NEWLINE + "\\subsection{RS}";
-			s += NEWLINE + "RS steganalysis works by measuring an image's `noise'. If you look at a photograph taken in a dark room, you may see speckles of light colours in dark patches. This is referred to as noise. Least significant bit replacement steganography increases the noise in an image on a minute scale. RS steganalysis measures this increase, and uses it to determine whether a given image contains embedded data.";
+			s += NEWLINE + "RS steganalysis works by measuring an image's `noise'. If you look at a photograph taken in a dark room, you may see speckles of light colours in dark patches. This is referred to as `noise'. Least significant bit replacement steganography increases the noise in an image on a minute scale. RS steganalysis measures this increase, and uses it to determine whether a given image contains embedded data.";
 			s += NEWLINE + "\\subsection{Chi-Square}";
-			s += NEWLINE + "Whilst we view images as blocks of colour, computers view them as numbers. In general, simply knowing the number of pixels in an image with value 220 does not allow us to accurately estimate the number of pixels in an image with value 221. If Least Signficant Bit Replacement steganography has taken place, we can sometimes make an accurate estimate. The Chi-Square test makes a large number of estimates about the numbers of specific pixels with specific properties, and sees how well they fit the actual image. If the fit is good, Steganography has almost certainly taken place.";
+			s += NEWLINE + "Whilst we view images as blocks of colour, computers view them as numbers. In general, simply knowing the number of pixels in an image with value 220 does not allow us to accurately estimate the number of pixels in an image with value 221. If Least Signficant Bit Replacement steganography has taken place, we can sometimes make an accurate estimate. The Chi-Square test makes a large number of estimates about the numbers of pixels with specific properties, and sees how well they fit the actual image. If the fit is good, Steganography has almost certainly taken place.";
 			s += NEWLINE + "\\end{document}";
 		}
 
@@ -125,7 +135,7 @@ public class PDFExporter {
 		try {
 			FileUtils.copyFile(latex, output);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "The output path provided is not valid.");
 			e.printStackTrace();
 		}
 		
@@ -142,7 +152,6 @@ public class PDFExporter {
 			out.close();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "The output path provided is not valid.");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -172,10 +181,10 @@ public class PDFExporter {
 		    	      bre.close();
 			p.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// Shouldn't happen
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			// Shouldn't happen
 			e.printStackTrace();
 		}
 	}
@@ -191,7 +200,7 @@ public class PDFExporter {
 		deleteDirectory(d);
 	}
 	
-	public static boolean deleteDirectory(File dir) {
+	private static boolean deleteDirectory(File dir) {
 	    if (dir.isDirectory()) {
 	        String[] contents = dir.list();
 	        for (int i = 0; i < contents.length; i++) {

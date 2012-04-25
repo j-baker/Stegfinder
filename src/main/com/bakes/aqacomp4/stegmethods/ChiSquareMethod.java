@@ -14,11 +14,7 @@ import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
  */
 public class ChiSquareMethod implements StegMethod {
 
-	/**
-	 * 
-	 */
 	public ChiSquareMethod() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -35,7 +31,7 @@ public class ChiSquareMethod implements StegMethod {
 					try {
 						bins[image.getPixel(i, j, q)]++;
 					} catch (ImageTooSmallException e) {
-						// TODO Auto-generated catch block
+						// No need to do anything, since this should never happen.
 						e.printStackTrace();
 					}
 				}
@@ -45,7 +41,6 @@ public class ChiSquareMethod implements StegMethod {
 			{
 				chiSquare += Math.pow((bins[2*i] - bins[2*i+1])/2, 2)/((bins[2*i] + bins[2*i +1])/2);
 			}
-			// TODO More accurate critical values.
 			numResults++;
 			if (chiSquare < 80)
 			{

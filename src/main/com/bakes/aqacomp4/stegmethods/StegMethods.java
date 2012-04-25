@@ -35,7 +35,7 @@ public enum StegMethods {
 		case SPAM:
 			return new SPAMMethod();
 		}
-		// TODO It won't ever get to this part, due to structure of enum. Inserted in order to satisfy compiler!
+		// It won't ever get to this part, due to structure of enum. Inserted in order to satisfy compiler!
 		return null;
 	}
 	
@@ -48,5 +48,5 @@ public enum StegMethods {
 	{
 		return type;
 	}
-	// TODO One less data dependency.
+	// One less data dependency.
 }

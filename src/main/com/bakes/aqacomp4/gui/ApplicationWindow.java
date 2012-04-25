@@ -56,7 +56,7 @@ public class ApplicationWindow implements ActionListener {
 	
 	private ProcessImageQueue processor = null;
 	
-	private HashMap<StegMethods, JCheckBox> stegMethods = new HashMap<StegMethods, JCheckBox>(); // TODO Explain the hashcode stuff... Hashcode never changes.
+	private HashMap<StegMethods, JCheckBox> stegMethods = new HashMap<StegMethods, JCheckBox>();
 
 
 	/**
@@ -115,10 +115,10 @@ public class ApplicationWindow implements ActionListener {
 	private void initialize() {
 		// Make the application window.
 		application = new JFrame(); 
-		application.setResizable(false); // TODO Resizing disabled to make laying out easier. May investigate minimum sizes.
+		application.setResizable(false); // Resizing disabled to make laying out easier.
 		
 		application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // The application needs to exit when this is closed.
-		application.setTitle("Stegfinder"); //TODO Redo with constant of some kind.
+		application.setTitle("Stegfinder");
 		java.awt.Image icon = Toolkit.getDefaultToolkit().getImage("Logo1");
 		application.setIconImage(icon);
 		
@@ -148,7 +148,6 @@ public class ApplicationWindow implements ActionListener {
 		sourcePathConstraints.gridy = 0;
 		application.getContentPane().add(sourcePath, sourcePathConstraints);
 		
-		// TODO Method specific buttons. To be made procedural in a later stage.
 		
 		int gridYOffset = 0;
 		int gridXOffset = 0;
@@ -161,7 +160,7 @@ public class ApplicationWindow implements ActionListener {
 			constraints.gridx = gridXOffset;
 			constraints.gridy = gridYOffset+1;
 			gridXOffset++;
-			if (gridXOffset > 4)
+			if (gridXOffset > 3)
 			{
 				gridXOffset = 0;
 				gridYOffset++;
@@ -170,7 +169,7 @@ public class ApplicationWindow implements ActionListener {
 			stegMethods.put(s, chckBx);
 		}
 		
-		// TODO The scrollpane is necessary for the table - so that there can be an 'unlimited' number of items in the queue.
+		// The scrollpane is necessary for the table - so that there can be an 'unlimited' number of items in the queue.
 		
 		int tableHeight = 8;
 		
@@ -289,7 +288,7 @@ public class ApplicationWindow implements ActionListener {
 		    chooser.addChoosableFileFilter(f);
 		    chooser.setAcceptAllFileFilterUsed(false); // Disallow the 'all files selection'.
 		    chooser.setFileFilter(f);
-		    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
+		    if (chooser.showOpenDialog(application) == JFileChooser.APPROVE_OPTION) { 
 		    	File file = chooser.getSelectedFile();
 		    	sourcePath.setText(file.getAbsolutePath());
 		    }
@@ -368,7 +367,7 @@ public class ApplicationWindow implements ActionListener {
 			int mod = arg0.getModifiers();
 
 	        if ((mod & ActionEvent.SHIFT_MASK) > 0) {
-	        	if (JOptionPane.showConfirmDialog(null, "Are you sure you want to empty the queue?", "Confirm",
+	        	if (JOptionPane.showConfirmDialog(application, "Are you sure you want to empty the queue?", "Confirm",
                                       JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 	        	{
 	        		tableModel.clearQueue();
@@ -400,6 +399,10 @@ public class ApplicationWindow implements ActionListener {
 		
 	}
 	
+
+	/**
+	 * @return The exporter that can be used to create results reports.
+	 */
 	public Export getExporter()
 	{
 		return exporter;
@@ -449,6 +452,11 @@ public class ApplicationWindow implements ActionListener {
 	    }
 	}
 
+	
+	/**
+	 * Change the text on the start stop button.
+	 * @param string The desired result text.
+	 */
 	public void setStartStopText(String string) {
 		startStop.setText(string);
 	}

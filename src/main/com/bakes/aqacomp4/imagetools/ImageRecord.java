@@ -1,12 +1,12 @@
 package com.bakes.aqacomp4.imagetools;
-
-import com.bakes.aqacomp4.stegmethods.StegMethod;
-import com.bakes.aqacomp4.stegmethods.StegMethods;
-
 /**
  * @author bakes
  * The queue item. Contains the path to the image that is to be tested, and information regarding which method of steganalysis should be used. If said method has been run correctly, the result of steganalysis can also be acccessed.
  */
+import com.bakes.aqacomp4.stegmethods.StegMethod;
+import com.bakes.aqacomp4.stegmethods.StegMethods;
+
+
 public class ImageRecord {
 	private String imagePath;
 	private boolean hasBeenTested = false;
@@ -53,11 +53,11 @@ public class ImageRecord {
 				this.result = method.testImage(i);
 				this.hasBeenTested = true;
 			} catch (ImageTooSmallException e) {
-				// TODO Auto-generated catch block
+				// Should never happen
 				e.printStackTrace();
 				return false;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				// Should never happen
 				e.printStackTrace();
 				return false;
 			}			
