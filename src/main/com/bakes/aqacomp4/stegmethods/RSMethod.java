@@ -36,12 +36,13 @@ public class RSMethod implements StegMethod {
 					{
 						group[k] = image.getPixel(i, j+k, q);
 					}
-					int t = calculateNoise(mask(group, 1));
-					if (calculateNoise(group) < t)
+					int unmasked = calculateNoise(group);
+					int masked = calculateNoise(mask(group, 1));
+					if (masked < unmasked)
 					{
 						counts[q.ordinal()][0]++;
 					}
-					else if (calculateNoise(group) == t)
+					else if (masked == unmasked)
 					{
 						counts[q.ordinal()][2]++;
 					}
@@ -49,12 +50,12 @@ public class RSMethod implements StegMethod {
 					{
 						counts[q.ordinal()][1]++;
 					}
-					t = calculateNoise(mask(group, -1));
-					if (calculateNoise(group) < t)
+					masked = calculateNoise(mask(group, -1));
+					if (unmasked < masked)
 					{
 						counts[q.ordinal()][3]++;
 					}
-					else if (calculateNoise(group) == t)
+					else if (unmasked == masked)
 					{
 						counts[q.ordinal()][5]++;
 					}
@@ -62,14 +63,13 @@ public class RSMethod implements StegMethod {
 					{
 						counts[q.ordinal()][4]++;
 					}
+					masked = calculateNoise(flipSLSB(group));
 					
-					t = calculateNoise(flipSLSB(group));
-					
-					if (calculateNoise(group) < t)
+					if (unmasked < masked)
 					{
 						counts[q.ordinal()][6]++;
 					}
-					else if (calculateNoise(group) == t)
+					else if (unmasked < masked)
 					{
 						counts[q.ordinal()][8]++;
 					}
@@ -104,6 +104,7 @@ public class RSMethod implements StegMethod {
 		}
 		double mean = result / resultCount;
 		
+		// Rough code to map estimates to 'probabilities' of embedding. Could just as easily use hyperbolic tangent or similar. 
 		if (mean > 0.1)
 		{
 			return 1;

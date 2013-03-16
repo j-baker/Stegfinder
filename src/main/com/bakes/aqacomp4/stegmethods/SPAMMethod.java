@@ -64,6 +64,7 @@ public class SPAMMethod implements StegMethod {
 	// The maximum difference that is to be measured during processing. Larger number means much larger processing time.
 	private static final int MAX_DIFFERENCE = 3;
 	
+	// Yes, massively nested for loops *are* required.
 	double[][] getSPAMFeatures(Image image)
 	{
 		// This array represents the numbers of pixels in the image which satisfy the conditions: int[Colour][direction of movement (as determined by the directionToArray function)][root pixel has a difference to the next pixel of value][first pixel along has a difference to the next pixel of value][second pixel along has a difference to the next pixel of value].

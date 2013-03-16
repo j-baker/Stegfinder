@@ -42,6 +42,8 @@ public class ChiSquareMethod implements StegMethod {
 				chiSquare += Math.pow((bins[2*i] - bins[2*i+1])/2, 2)/((bins[2*i] + bins[2*i +1])/2);
 			}
 			numResults++;
+			// Chi-square approximates to a normal distribution.
+			// Since peak so small, below approximation is absolutely fine.
 			if (chiSquare < 80)
 			{
 				result += 1;

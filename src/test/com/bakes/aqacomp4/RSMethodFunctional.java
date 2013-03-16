@@ -1,14 +1,12 @@
 package com.bakes.aqacomp4;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.bakes.aqacomp4.imagetools.BasicImporter;
-import com.bakes.aqacomp4.imagetools.ImageImporter;
-import com.bakes.aqacomp4.imagetools.ImageNotTestedException;
+import com.bakes.aqacomp4.imagetools.Image;
 import com.bakes.aqacomp4.imagetools.ImageTooSmallException;
 import com.bakes.aqacomp4.stegmethods.RSMethod;
 import com.bakes.aqacomp4.stegmethods.StegMethod;
@@ -16,7 +14,6 @@ import com.bakes.aqacomp4.stegmethods.StegMethod;
 public class RSMethodFunctional {
 	static final String prefix = "res/kosmo_";
 	static final String suffix = ".bmp";
-	ImageImporter importer = new BasicImporter();
 	StegMethod s;
 	static final double ERROR_MARGIN = 0.3;
 
@@ -40,24 +37,13 @@ public class RSMethodFunctional {
 		for (int i = 0; i <= 100; i+=5)
 		{
 			System.out.println("Testing "+i);
-			s.loadImage(importer.importImage(prefix+i+suffix));
 			try {
-				s.testImage();
-			} catch (ImageTooSmallException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				double[] result = s.getNumericalResult();
-				for (int j = 0; j < 1; j++)
+				double result = s.testImage(new Image(prefix+i+suffix));
+				if (result + ERROR_MARGIN < i*0.01 || result - ERROR_MARGIN > i*0.01)
 				{
-					if (result[j] + ERROR_MARGIN < i*0.01 || result[j] - ERROR_MARGIN > i*0.01)
-					{
-						fail("Test not accurate enough");
-					}
+					fail("Test not accurate enough");
 				}
-			} catch (ImageNotTestedException e) {
-				// TODO Auto-generated catch block
+			} catch (ImageTooSmallException e) {
 				e.printStackTrace();
 			}
 		}

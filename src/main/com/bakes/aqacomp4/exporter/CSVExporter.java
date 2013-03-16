@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
-import com.aqa.AQAWriteTextFile;
 import com.bakes.aqacomp4.imagetools.ImageNotTestedException;
 import com.bakes.aqacomp4.imagetools.ImageRecord;
 
